@@ -1,27 +1,18 @@
 "use client";
 
-import { useState } from "react";
-import { Eye, EyeOff, Lock, UserRound } from "lucide-react";
+import { useActionState, useState } from "react";
+import { AlertCircle, Eye, EyeOff, Lock, UserRound } from "lucide-react";
 import { Input } from "@/components/ui/Input";
-import { Button, ButtonLink } from "@/components/ui/Button";
+import { SubmitButton } from "@/components/ui/SubmitButton";
+import { login } from "./actions";
+import { idle } from "@/lib/actions";
 
-/**
- * Fase 1: formulario visual. El inicio de sesión real (Supabase Auth,
- * validación en servidor y límite de intentos) se conecta en la Fase 3.
- */
 export function LoginForm() {
   const [show, setShow] = useState(false);
-  const [notice, setNotice] = useState(false);
+  const [state, action] = useActionState(login, idle);
 
   return (
-    <form
-      className="mt-8 space-y-5"
-      onSubmit={(e) => {
-        e.preventDefault();
-        setNotice(true);
-      }}
-      noValidate
-    >
+    <form action={action} className="mt-8 space-y-5">
       <Input
         label="Usuario"
         name="username"
@@ -29,6 +20,7 @@ export function LoginForm() {
         autoCapitalize="none"
         spellCheck={false}
         placeholder="nombre.apellido"
+        required
         leading={<UserRound className="h-4 w-4" />}
       />
       <div className="relative">
@@ -38,6 +30,7 @@ export function LoginForm() {
           type={show ? "text" : "password"}
           autoComplete="current-password"
           placeholder="••••••••"
+          required
           leading={<Lock className="h-4 w-4" />}
         />
         <button
@@ -50,20 +43,16 @@ export function LoginForm() {
         </button>
       </div>
 
-      <Button type="submit" size="lg" className="w-full">
-        Entrar
-      </Button>
-
-      {notice && (
-        <div role="status" className="animate-fade-in rounded-[var(--radius-md)] bg-surface p-4 text-[13px] text-ink-2">
-          <p className="font-medium text-ink">Vista previa de diseño (Fase 1)</p>
-          <p className="mt-1">El acceso real se activará al conectar Supabase. Mientras tanto puedes ver:</p>
-          <div className="mt-3 flex gap-2">
-            <ButtonLink href="/panel" size="sm">Administración</ButtonLink>
-            <ButtonLink href="/mi" size="sm" variant="secondary">Trabajador</ButtonLink>
-          </div>
-        </div>
+      {state.message && (
+        <p role="alert" className="flex items-center gap-2 rounded-[var(--radius-md)] bg-danger-soft px-3.5 py-2.5 text-[14px] text-danger">
+          <AlertCircle className="h-4 w-4 shrink-0" aria-hidden="true" />
+          {state.message}
+        </p>
       )}
+
+      <SubmitButton size="lg" className="w-full" pendingText="Entrando…">
+        Entrar
+      </SubmitButton>
     </form>
   );
 }

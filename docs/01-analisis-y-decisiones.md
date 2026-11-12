@@ -56,30 +56,45 @@ Tres ideas vertebran la arquitectura propuesta:
 | **R9. Partes de horas ≠ registro de jornada.** El registro de jornada legal (art. 34.9 ET) tiene requisitos propios. | Medio | Los partes de horas se usan solo para imputar costes a obra y no se presentan como registro de jornada. Si se quiere, sería un módulo futuro específico. |
 | **R10. Dependencia de un único desarrollador/IA.** | Medio | Código documentado, migraciones versionadas en Git, `CLAUDE.md` y `README.md` actualizados, pruebas automáticas. |
 
-## 4. Decisiones que necesito que confirméis
+## 4. Decisiones tomadas (12/11/2026)
+
+| # | Decisión | Resultado |
+|---|----------|-----------|
+| D1 | Acceso | **Usuario + contraseña para todos** (también los 3 administradores). El email técnico interno no es un buzón. |
+| D2 | Facturas | Se emiten en **Contasimple (Segid)**. RS Control las **registra** (manual o importando el CSV exportado de Contasimple) y controla cobros, pagos y rentabilidad. |
+| D3 | Coste de material | El trabajador solo comunica **salidas y devoluciones** (no consumos): coste de material de la obra = **salidas − devoluciones aptas**, a coste histórico. Las devoluciones dañadas quedan como merma de la obra. |
+| D4 | Stock | **Nunca negativo**: no se puede sacar más de lo disponible. |
+| D6 | Valoración | **Precio medio ponderado**, congelado en cada movimiento. |
+| D9 | Encargados | **No existen**. Hay 3 administradores (2 gerentes + administración). |
+| — | App del trabajador | Solo: solicitar material, confirmar recepciones, **salidas y devoluciones (registro directo, sin validación previa)**, indicar obra(s) y vehículo, comunicar incidencias con fotos, ver herramientas a su cargo. **Sin vacaciones** (las gestiona administración). |
+| D11 | Identidad | Logotipo oficial redibujado en vectorial; azul **#283582** y rojo **#E2070F** extraídos del logotipo. |
+| D13 | Material no catalogado | Se puede pedir en texto libre. |
+| D14 | Registros del trabajador | Directos; administración puede anular con movimiento inverso. |
+
+## 5. Decisiones aún pendientes
 
 Marcadas con mi recomendación. Las D1–D4 hacen falta **antes de la Fase 3**; el
 resto puede confirmarse antes de su fase.
 
 | # | Decisión | Opciones | Recomendación |
 |---|----------|----------|---------------|
-| **D1** | Forma de acceso | (a) Usuario + contraseña para trabajadores, email real para administradores · (b) Email para todos | **(a)**. Las contraseñas olvidadas de trabajadores las restablece administración. Doble factor (app autenticadora) **obligatorio para administradores**. |
-| **D2** | Facturas | (a) Registrar facturas emitidas en otro programa · (b) Emitir facturas desde RS Control | **(a)** en v1 (ver R1). ¿Qué programa de facturación usáis hoy? |
-| **D3** | Coste de material de la obra | (a) Por consumo, con "pendiente de justificar" aparte · (b) Por entrega | **(a)**, con regla de cierre: no se cierra una obra con material pendiente sin justificar. |
-| **D4** | Entregas sin stock suficiente | (a) Bloquear; registrar entrada/ajuste justificado antes · (b) Permitir stock negativo | **(a)**. |
+| ~~D1~~ | Forma de acceso (resuelta) | (a) Usuario + contraseña para trabajadores, email real para administradores · (b) Email para todos | **(a)**. Las contraseñas olvidadas de trabajadores las restablece administración. Doble factor (app autenticadora) **obligatorio para administradores**. |
+| ~~D2~~ | Facturas (resuelta) | (a) Registrar facturas emitidas en otro programa · (b) Emitir facturas desde RS Control | **(a)** en v1 (ver R1). ¿Qué programa de facturación usáis hoy? |
+| ~~D3~~ | Coste de material (resuelta) | (a) Por consumo, con "pendiente de justificar" aparte · (b) Por entrega | **(a)**, con regla de cierre: no se cierra una obra con material pendiente sin justificar. |
+| ~~D4~~ | Stock (resuelta) | (a) Bloquear; registrar entrada/ajuste justificado antes · (b) Permitir stock negativo | **(a)**. |
 | **D5** | Mano de obra | (a) Partes de horas × coste horario por categoría · (b) Importe manual por obra · (c) Ambos | **(c)**: partes de horas como método principal, importes manuales para casos especiales. ¿Quién registra las horas: el trabajador o administración? |
 | **D6** | Valoración del inventario | (a) Precio medio ponderado (PMP) · (b) FIFO · (c) Último precio | **(a) PMP**: estándar, sencillo de explicar, estable. El coste se congela en cada movimiento. |
 | **D7** | Sin conexión | (a) Solo con conexión en v1 · (b) Cola offline desde el principio | **(a)**, valorando (b) tras probar en obra. |
 | **D8** | Notificaciones | (a) Dentro de la app · (b) + notificaciones push al móvil · (c) + email | **(a)** desde la Fase 3 y **(b)** en la Fase 6. En iPhone, las push exigen tener la app instalada en la pantalla de inicio. |
-| **D9** | ¿Hay encargados/jefes de obra? | ¿Algún trabajador necesita ver más que el resto (p. ej., aprobar solicitudes de su obra o ver su equipo)? | Si existe la figura, crear el rol **"Encargado"** desde el inicio. |
+| ~~D9~~ | Encargados (resuelta) | ¿Algún trabajador necesita ver más que el resto (p. ej., aprobar solicitudes de su obra o ver su equipo)? | Si existe la figura, crear el rol **"Encargado"** desde el inicio. |
 | **D10** | Vacaciones | Días por año según convenio (¿30 naturales o 22 laborables?), festivos de Utrera, ¿se arrastran días al año siguiente? | Indicadme el convenio aplicable (Sector del Metal de Sevilla, probablemente). |
-| **D11** | Identidad visual | ¿Disponéis del logotipo en SVG/PDF y de los colores exactos (códigos HEX/Pantone)? | Ahora uso un logotipo tipográfico provisional y colores aproximados, cambiables en un solo archivo. |
+| ~~D11~~ | Identidad (resuelta) | ¿Disponéis del logotipo en SVG/PDF y de los colores exactos (códigos HEX/Pantone)? | Ahora uso un logotipo tipográfico provisional y colores aproximados, cambiables en un solo archivo. |
 | **D12** | Modo oscuro | Sí / No en v1 | **No en v1**; los tokens de diseño ya lo permiten más adelante. |
 | **D13** | Material sin catálogo | ¿Puede un trabajador pedir algo que no está en el catálogo (texto libre)? | **Sí**, marcado como "no catalogado" para que administración lo dé de alta o lo compre. |
 | **D14** | Consumos registrados por trabajadores | (a) Se contabilizan directamente (administración puede corregir) · (b) Requieren validación | **(a)**: menos fricción; todo queda auditado. |
 | **D15** | Dominio | ¿Queréis usar un subdominio propio (p. ej. `control.rsinstalaciones.es`)? | Sí, si tenéis dominio. Si no, la dirección gratuita de Vercel sirve para empezar. |
 
-## 5. Fuera del alcance de la v1 (propuesto)
+## 6. Fuera del alcance de la v1 (propuesto)
 
 - Emisión de facturas (ver R1) y conexión bancaria automática (pedido así).
 - Registro de jornada legal (R9).

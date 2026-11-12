@@ -1,36 +1,32 @@
-# 05 · Plan de desarrollo por fases
+# 05 · Plan de desarrollo y estado
 
-Cada fase termina con: compilación correcta, pruebas superadas, documentación
-actualizada, capturas o demostración, y **vuestra revisión antes de continuar**.
+Por petición de RS (12/11/2026) se construyó la aplicación completa de una vez,
+manteniendo el orden técnico previsto (base de datos y seguridad primero, almacén
+como primer módulo) y probando cada parte.
 
-| Fase | Contenido | Entregable para revisar | Necesito de vosotros |
-|------|-----------|-------------------------|----------------------|
-| **1. Preparación** ✅ | Next.js 16 + TypeScript + Tailwind 4, Git, tokens de diseño, componentes base, navegación admin y trabajador, pantallas iniciales, PWA (manifiesto e iconos), formatos españoles, documentación | Este análisis + capturas en `docs/capturas/` | Repositorio de GitHub; respuestas a D1–D15 |
-| **2. Diseño visual** | Pulido de login, panel admin, inicio del trabajador, menú y cabecera; nuevos componentes (tabla, selectores, diálogos, toasts, esqueletos de carga); flujo visual de "Solicitar material" en móvil; logotipo/colores definitivos | Prototipo navegable con datos de ejemplo | Logotipo y colores oficiales (D11); opinión sobre el diseño |
-| **3. Backend y base de datos** | Supabase (dev), migraciones del modelo, Auth con usuarios, roles y RLS, buckets privados, auditoría, datos de prueba ficticios, **pruebas de seguridad** (un trabajador intentando leer tesorería, etc.), login real y `proxy.ts` | Login funcionando con usuarios de prueba; informe de pruebas de permisos | Crear proyecto Supabase (guiado) |
-| **4. Almacén** | Catálogo, categorías, unidades, stock, entradas, solicitudes, aprobación, preparación, entregas, recepción, consumos, devoluciones, ajustes, historial, alertas, informes y exportación | Módulo completo + pruebas de inventario (saldos = movimientos) | Catálogo inicial de materiales (Excel actual) |
-| **5. Obras** | Fichas, estados e historial, asignaciones, documentos, ingresos, costes (material del almacén), partes de horas, rentabilidad, incidencias | Ficha económica de obra con cálculos verificados | Listado de obras activas y clientes |
-| **6. Trabajadores** | Fichas, datos sensibles, documentos con caducidad, vacaciones, EPIs, formación, notificaciones push | App del trabajador completa | Convenio y festivos (D10) |
-| **7. Tesorería** | Cuentas, movimientos, cobros/pagos, préstamos, renting, recurrentes, previsión 30/60/90 | Previsión de tesorería con alertas | Cuentas y compromisos (sin datos reales hasta producción) |
-| **8. Facturas y documentación** | Registro de facturas emitidas/recibidas, IVA, retenciones, cobros parciales, repositorio documental | Ciclo factura → cobro → tesorería → obra | Confirmar D2 |
-| **9. Vehículos y herramientas** | Flota, ITV/seguros, mantenimientos, herramientas y asignaciones | Módulo con alertas | Listado de vehículos y herramientas |
-| **10. Informes** | Informes de almacén, obras, finanzas y personal; filtros por periodo; Excel/PDF; panel con datos reales | Batería de informes | Qué informes usáis hoy |
-| **11. Pruebas y seguridad** | Pruebas funcionales, de permisos, de cálculos, responsive, rendimiento, revisión de seguridad, prueba de restauración de copias | Informe de pruebas | Prueba piloto con 1–2 trabajadores |
-| **12. Puesta en marcha** | Supabase Pro y Vercel Pro, dominio, copias externas, carga de datos reales, formación | **Solo con vuestra autorización expresa** | Contratación de planes, autorización |
+## Estado
 
-## Fase 1 — estado
+| Fase | Contenido | Estado |
+|------|-----------|--------|
+| 1 | Proyecto, diseño base, navegación, documentación | ✅ |
+| 2 | Diseño visual: logotipo oficial, colores corporativos, componentes | ✅ |
+| 3 | Base de datos (7 migraciones), RLS, funciones transaccionales, almacenamiento privado, auditoría, autenticación, datos de prueba | ✅ (entorno local) |
+| 4 | Almacén: catálogo, stock, entradas, solicitudes, entregas, salidas, devoluciones, ajustes, anulaciones, historial, alertas, reposición | ✅ |
+| 5 | Obras: fichas, estados e historial, equipo, ingresos, costes previstos y reales, gastos, rentabilidad, material, documentos, incidencias | ✅ |
+| 6 | Trabajadores: fichas, DNI protegido, documentos con caducidad, vacaciones y ausencias, calendario, formación, EPIs, asignaciones, cuentas de acceso | ✅ |
+| 7 | Tesorería: cuentas, movimientos, transferencias, anulaciones, previsión 30/60/90 con alertas, préstamos, pólizas, renting, gastos recurrentes | ✅ |
+| 8 | Facturas: emitidas y recibidas, IVA (incl. inversión del sujeto pasivo), IRPF, retención de garantía, cobros/pagos parciales, importación CSV de Contasimple, documentación de empresa | ✅ |
+| 9 | Vehículos (ITV, seguro, revisiones, mantenimientos, asignación) y herramientas (entregas y devoluciones) | ✅ |
+| 10 | Panel con datos reales, informes (almacén, obras, finanzas, personal), exportación Excel, impresión/PDF, buscador general, notificaciones | ✅ |
+| 11 | Pruebas: 20 unitarias, 32 de seguridad/inventario en base de datos, 26 comprobaciones extremo a extremo en navegador | ✅ automáticas · ⏳ piloto con trabajadores |
+| 12 | Puesta en producción (Supabase Pro + Vercel Pro) | ⏳ **requiere vuestra autorización y cuentas** |
 
-- [x] Proyecto Next.js 16 + TypeScript (estricto) + Tailwind 4 + ESLint
-- [x] Repositorio Git local con historial
-- [x] Tokens de diseño (paleta azul/rojo, neutros, estados, radios, sombras, movimiento)
-- [x] Componentes base reutilizables
-- [x] Marco de administración (barra lateral, buscador, notificaciones, perfil, cajón móvil)
-- [x] Marco del trabajador (cabecera + barra inferior)
-- [x] Pantallas: login, panel, inicio del trabajador, módulos provisionales
-- [x] Manifiesto PWA e iconos provisionales
-- [x] Formatos españoles (moneda, números, fechas, IBAN) con pruebas
-- [x] Roles y permisos definidos con pruebas
-- [x] Documentación: análisis, arquitectura, modelo de datos, diseño, plan
-- [ ] **Subir a GitHub** (pendiente de repositorio)
-- [ ] *Service worker* (se añade en Fase 3, junto con la sesión, para garantizar
-      desde el principio que nunca guarda datos privados)
+## Pendiente antes de usar con datos reales
+
+1. Repositorio privado en GitHub (para guardar el código de forma permanente).
+2. Cuentas de Supabase y Vercel (ver `docs/06-operaciones.md`).
+3. Doble factor obligatorio para administradores (Supabase MFA) — recomendado antes de producción.
+4. Prueba piloto con 1–2 trabajadores en obra.
+5. Carga de datos reales: catálogo de materiales (desde vuestro Excel), obras activas,
+   clientes, proveedores, trabajadores, vehículos, cuentas y saldos.
+6. Copias de seguridad externas automatizadas.

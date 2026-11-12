@@ -12,8 +12,9 @@ const securityHeaders = [
 ];
 
 const nextConfig: NextConfig = {
-  cacheComponents: true,
-  partialPrefetching: true,
+  // Cache Components desactivado a propósito: todos los datos son privados y
+  // por usuario; renderizar siempre en servidor evita servir datos cacheados
+  // de un usuario a otro (ver docs/02-arquitectura.md).
   poweredByHeader: false,
   turbopack: {
     rules: {
@@ -24,7 +25,11 @@ const nextConfig: NextConfig = {
     },
   },
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // El service worker nunca se cachea, para que las actualizaciones lleguen al momento
+      { source: "/sw.js", headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }, { key: "Content-Type", value: "application/javascript; charset=utf-8" }] },
+    ];
   },
 };
 

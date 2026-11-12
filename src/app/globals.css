@@ -13,8 +13,7 @@
  *                    siempre acompañado de icono y texto.
  *   Así un acento corporativo nunca se confunde con un error.
  *
- * Los valores exactos de azul y rojo son PROVISIONALES hasta recibir el manual
- * de identidad de RS. Cambiarlos aquí actualiza toda la aplicación.
+ * Azul y rojo tomados del logotipo oficial de RS Instalaciones XXI.
  */
 
 @theme {
@@ -23,25 +22,25 @@
     "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
-  /* Azul corporativo (color principal) */
-  --color-brand-50: #eef4ff;
-  --color-brand-100: #dbe6fe;
-  --color-brand-200: #bfd3fe;
-  --color-brand-300: #93b4fd;
-  --color-brand-400: #5f8cf8;
-  --color-brand-500: #3a6cf0;
-  --color-brand-600: #1f5bd6;
-  --color-brand-700: #1847b0;
-  --color-brand-800: #193c8c;
-  --color-brand-900: #142f68;
-  --color-brand-950: #0d1d42;
+  /* Azul corporativo RS (exacto del logotipo: #283582) */
+  --color-brand-50: #f0f2fb;
+  --color-brand-100: #dfe3f5;
+  --color-brand-200: #bec6ea;
+  --color-brand-300: #8f9cd8;
+  --color-brand-400: #6072c4;
+  --color-brand-500: #3d52ad;
+  --color-brand-600: #283582;
+  --color-brand-700: #212c6d;
+  --color-brand-800: #1b245a;
+  --color-brand-900: #151c48;
+  --color-brand-950: #0e1330;
 
-  /* Rojo corporativo (énfasis de identidad, uso medido) */
-  --color-accent-50: #fef2f2;
-  --color-accent-100: #fde3e3;
-  --color-accent-500: #e5303a;
-  --color-accent-600: #d21f2b;
-  --color-accent-700: #b01822;
+  /* Rojo corporativo RS (exacto del logotipo: #E2070F) */
+  --color-accent-50: #fdeced;
+  --color-accent-100: #fbd3d5;
+  --color-accent-500: #e2070f;
+  --color-accent-600: #c4060d;
+  --color-accent-700: #a1050b;
 
   /* Neutros (inspirados en superficies de Apple) */
   --color-canvas: #ffffff; /* fondo principal */
@@ -59,13 +58,13 @@
   --color-success-soft: #e8f5ec;
   --color-warning: #9c5300;
   --color-warning-soft: #fff4e5;
-  --color-danger: #c4141f;
-  --color-danger-soft: #fdecec;
-  --color-info: #1f5bd6;
-  --color-info-soft: #eef4ff;
+  --color-danger: #b42318;
+  --color-danger-soft: #fef3f2;
+  --color-info: #283582;
+  --color-info-soft: #f0f2fb;
 
   /* Series de gráficos (validadas para daltonismo, ver docs/04) */
-  --color-series-1: #1f5bd6;
+  --color-series-1: #3d52ad;
   --color-series-2: #e8792f;
 
   /* Radios */

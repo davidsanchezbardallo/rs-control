@@ -93,3 +93,8 @@ export function maskIban(iban: string): string {
   if (clean.length < 8) return "••••";
   return `${clean.slice(0, 4)} •••• •••• •••• •••• ${clean.slice(-4)}`;
 }
+
+/** "1 artículo" / "3 artículos" */
+export function plural(n: number, one: string, many: string): string {
+  return `${formatNumber(n, 0)} ${n === 1 ? one : many}`;
+}

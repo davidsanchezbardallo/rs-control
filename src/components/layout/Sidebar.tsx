@@ -3,18 +3,16 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ADMIN_NAV, isActive } from "@/lib/navigation/nav";
-import { can, type Role } from "@/lib/permissions/roles";
 import { cn } from "@/lib/utils/cn";
 import { Logo } from "@/components/brand/Logo";
 
 /** Navegación lateral. Se reutiliza en escritorio (fija) y móvil (cajón). */
-export function SidebarNav({ role, onNavigate }: { role: Role; onNavigate?: () => void }) {
+export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
   return (
     <nav aria-label="Navegación principal" className="flex-1 space-y-6 overflow-y-auto px-3 pb-6">
       {ADMIN_NAV.map((group) => {
-        const items = group.items.filter((i) => !i.permission || can(role, i.permission));
-        if (items.length === 0) return null;
+        const items = group.items;
         return (
           <div key={group.label}>
             <p className="px-3 pb-1.5 text-[11px] font-semibold tracking-wide text-muted uppercase">{group.label}</p>
@@ -55,7 +53,7 @@ export function SidebarNav({ role, onNavigate }: { role: Role; onNavigate?: () =
   );
 }
 
-export function Sidebar({ role }: { role: Role }) {
+export function Sidebar() {
   return (
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col border-r border-line bg-surface lg:flex">
       <div className="flex h-16 items-center px-6">
@@ -63,9 +61,9 @@ export function Sidebar({ role }: { role: Role }) {
           <Logo />
         </Link>
       </div>
-      <SidebarNav role={role} />
+      <SidebarNav />
       <div className="border-t border-line px-6 py-4 text-[11px] text-muted">
-        RS Control · v0.1 · Fase 1
+        RS Control · v1.0
       </div>
     </aside>
   );

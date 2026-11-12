@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { LoginForm } from "./LoginForm";
-import { Logo } from "@/components/brand/Logo";
+import { Logo, LogoMark } from "@/components/brand/Logo";
 
 export const metadata: Metadata = { title: "Acceso" };
 
@@ -20,7 +20,9 @@ export default function LoginPage() {
         />
         <div className="relative flex h-full flex-col justify-between p-12 text-white">
           <div className="flex items-center gap-3">
-            <span className="grid h-10 w-10 place-items-center rounded-[10px] bg-white text-[17px] font-bold text-brand-700">RS</span>
+            <span className="grid h-12 w-12 place-items-center rounded-[12px] bg-white">
+              <LogoMark className="h-9 w-9" />
+            </span>
             <span className="text-[15px] font-semibold tracking-tight">RS CONTROL</span>
           </div>
           <div>

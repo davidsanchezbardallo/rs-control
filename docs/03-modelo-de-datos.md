@@ -102,8 +102,6 @@ Cada flujo conecta los módulos sin duplicar datos:
 Solo al **contabilizar** se crean los `stock_movements` (en una transacción).
 
 **Vistas calculadas (no tablas, siempre coherentes):**
-- `material_custody` — por obra · trabajador · material: entregado, consumido,
-  devuelto, dañado y **pendiente de justificar** (con su valor).
 - `low_stock_materials` — materiales en o bajo su stock mínimo (alertas y reposición).
 - `project_material_costs` — coste de material consumido por obra.
 
@@ -127,9 +125,8 @@ Solo al **contabilizar** se crean los `stock_movements` (en una transacción).
 | Ingresos previstos | `project_budget_items` aprobados |
 | Ingresos reales (facturado) | `invoices` emitidas de la obra |
 | Cobrado / pendiente | `invoice_payments` |
-| Material | `stock_movements` de consumo (coste congelado) |
-| Material pendiente de justificar | vista `material_custody` (informativo) |
-| Mano de obra | `time_entries` × coste horario congelado (+ importes manuales) |
+| Material | `stock_movements`: salidas − devoluciones aptas (coste congelado) |
+| Mano de obra | `project_expenses` de mano de obra (horas × coste horario de la categoría, o importe) |
 | Subcontratas, alquileres, compras directas | líneas de `invoices` recibidas con destino "obra" |
 | Otros gastos | `project_expenses` |
 | Margen, % y desviación | calculados a partir de lo anterior |
@@ -170,41 +167,41 @@ puntuales. Cada línea marcada como **confirmada** o **estimada**.
 Herramienta **fungible** (brocas, discos) = material del almacén. Herramienta
 **identificable** (taladro, comprobador) = tabla `tools`.
 
-## 4. Inventario: reglas y funcionamiento
+## 4. Inventario: reglas y funcionamiento (implementado)
 
-**Modelo de "dónde está el material".** Cada línea de movimiento indica cómo
-cambia el stock de la nave (`warehouse_delta`) y el material "en obra" a cargo de
-un trabajador (`custody_delta`):
+> Actualizado tras las decisiones de RS: el trabajador comunica **salidas y
+> devoluciones**, no consumos. El material que sale para una obra es coste de esa
+> obra; lo que vuelve apto se le abona al mismo coste con que se cargó.
 
-| Movimiento | Nave | En obra | Coste de obra |
-|------------|:----:|:-------:|:-------------:|
-| Entrada por compra | + | | |
-| Entrega a trabajador/obra | − | + | |
-| Consumo | | − | **+ (coste real)** |
-| Devolución apta | + | − | |
-| Devolución dañada (merma) | | − | registrada como merma |
-| Ajuste positivo / negativo (justificado) | + / − | | |
-| Anulación | inversa exacta del documento original | | |
+Cada línea de `stock_movements` guarda cómo cambia el stock de la nave
+(`warehouse_delta`) y el material imputado a la obra (`project_delta`):
 
-**Reglas que la base de datos hace cumplir** (no solo la interfaz):
-1. Solo las funciones de contabilización crean movimientos; no hay inserción directa.
-2. `stock_movements` sin `UPDATE` ni `DELETE` (trigger que lo impide + sin permisos).
-3. Las solicitudes nunca tocan el stock; solo la entrega contabilizada.
-4. No se entrega más de lo disponible (stock bloqueado con `SELECT … FOR UPDATE`
-   durante la transacción); no existe stock negativo.
-5. No se consume ni devuelve más de lo que el trabajador tiene pendiente en esa obra.
-6. Los ajustes exigen motivo (pérdida, rotura, defectuoso, diferencia de
-   inventario, error de registro) y texto justificativo.
-7. **Coste**: precio medio ponderado. Entrada: recalcula el medio. Salida: usa el
-   medio vigente y lo **congela** en la línea. Así, la rentabilidad de una obra
-   pasada no cambia aunque suban los precios.
-8. Función de verificación: el saldo de `stock_balances` debe coincidir con la
-   suma de movimientos. Se ejecuta en las pruebas y periódicamente.
+| Movimiento | Quién | Nave | Coste de la obra |
+|------------|-------|:----:|:-----------------:|
+| Entrada por compra | Administración | + | |
+| Salida a obra (entrega de solicitud o retirada directa) | Administración o trabajador | − | + (coste medio vigente) |
+| Devolución apta | Administración o trabajador | + | − (al coste con que se cargó) |
+| Devolución dañada (merma) | Administración o trabajador | | se queda en la obra |
+| Ajuste positivo / negativo (justificado) | Administración | + / − | |
+| Anulación | Administración | inversa exacta | inversa exacta |
 
-**Flujo de una solicitud:** Pendiente → En revisión → Aprobada (con cantidades
-aprobadas por línea) → Preparada → **Entregada** (genera el documento de entrega)
-→ el trabajador confirma recepción. Rechazada y Cancelada son finales. Se admiten
-entregas parciales (una solicitud puede tener varias entregas).
+**Reglas que hace cumplir la base de datos** (pruebas en `supabase/tests`):
+1. Solo las funciones `inv_*` crean movimientos; no hay inserción directa.
+2. `stock_movements` sin `UPDATE` ni `DELETE` (trigger + sin permisos, incluso para el superusuario).
+3. Las solicitudes nunca tocan el stock; solo la salida.
+4. No existe stock negativo (bloqueo de fila `FOR UPDATE` en cada operación).
+5. No se devuelve más de lo retirado para esa obra.
+6. Los ajustes exigen motivo y justificación.
+7. Precio medio ponderado, congelado en cada línea.
+8. `inv_verify_balances()` comprueba que saldos = suma de movimientos.
+
+**Solicitud:** Pendiente → En revisión → Aprobada → Preparada → **Entregada**
+(la entrega genera la salida) → el trabajador confirma la recepción.
+Rechazada (con motivo) y Cancelada (por el trabajador si está pendiente) son finales.
+
+**Funciones del trabajador:** `request_create`, `inv_issue` (retirada directa),
+`inv_return`, `inv_confirm_reception`, `worker_join_project`, `worker_leave_project`,
+`worker_set_vehicle`, `materials_search` (sin costes), `my_context`, `my_project_materials`, `document_lines`.
 
 ## 5. Comparación con la lista del documento maestro
 

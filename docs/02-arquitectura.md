@@ -29,7 +29,7 @@
 
 | Decisión | Motivo |
 |----------|--------|
-| **Next.js 16 con App Router y Cache Components** (versión actual) | La "carcasa" de la app (menús, cabecera) carga al instante y los datos privados llegan en streaming. Las lecturas se hacen en el servidor: menos código en el móvil y ningún secreto en el navegador. |
+| **Next.js 16 con App Router, renderizado dinámico en servidor** | Cada página se genera en el servidor, en cada visita, con la sesión del usuario. *Cache Components* está **desactivado a propósito**: todos los datos son privados y por usuario, y una caché mal aplicada podría servir datos de un usuario a otro. |
 | **Server Actions + Zod** para todas las escrituras | Validación obligatoria en servidor con los mismos esquemas que usan los formularios. |
 | **Operaciones críticas como funciones de PostgreSQL** (entregar material, registrar devolución, cobro de factura…) | Se ejecutan en **una única transacción**, con bloqueo de filas: o se hace todo o no se hace nada. Dos administradores no pueden entregar el mismo stock a la vez. |
 | **RLS en todas las tablas expuestas** | Aunque alguien manipule la URL o llame a la API directamente con su sesión, PostgreSQL solo le devuelve las filas que su rol permite. |
@@ -51,7 +51,7 @@ rs-control/
 │   │   │   ├── panel/  almacen/  obras/  trabajadores/  vehiculos/
 │   │   │   └── tesoreria/  facturas/  informes/  configuracion/
 │   │   ├── (worker)/mi/       App del trabajador (barra inferior móvil)
-│   │   │   └── obras/  material/  vacaciones/  perfil/
+│   │   │   └── material/  movimientos/  incidencias/  perfil/
 │   │   ├── manifest.ts        Manifiesto PWA
 │   │   └── layout.tsx         Estructura raíz (idioma, fuente, metadatos)
 │   ├── components/
@@ -59,15 +59,17 @@ rs-control/
 │   │   ├── layout/            Barra lateral, cabecera, marcos admin/trabajador
 │   │   ├── brand/             Logotipo
 │   │   └── dashboard/         Piezas del panel (gráficos…)
-│   ├── features/              (desde Fase 4) Lógica por módulo: inventory/, projects/…
-│   │   └── <modulo>/          queries.ts · actions.ts · schemas.ts · components/
+│   ├── features/              Lógica por módulo: inventory, projects, employees, finance,
+│   │   │                      fleet, contacts, documents, incidents, reports, settings, worker…
+│   │   └── <modulo>/          actions.ts (servidor) · queries.ts · components/
 │   ├── lib/
 │   │   ├── supabase/          (Fase 3) clientes de servidor/navegador
 │   │   ├── permissions/       Roles y permisos
 │   │   ├── navigation/        Menús y módulos
 │   │   └── utils/             Formatos españoles, utilidades
 │   └── proxy.ts               (Fase 3) protección de rutas
-├── supabase/                  (Fase 3) migrations/ · seed.sql · tests/
+├── supabase/                  migrations/ (7) · seed.sql · tests/ (pgTAP)
+├── scripts/seed-demo.mjs      Datos de demostración ficticios (solo entorno local)
 ├── tests/                     (Fase 4) pruebas extremo a extremo
 ├── .env.example               Variables necesarias (sin valores reales)
 ├── CLAUDE.md · AGENTS.md      Reglas de trabajo para Claude Code
@@ -141,10 +143,12 @@ trabajador **no** tiene acceso a tesorería, facturas, costes ni datos sensibles
 - IBAN mostrado como `ES91 •••• … 1332`; se ve completo solo bajo petición.
 
 **Documentos**
-- Buckets **privados**: `employee-docs`, `project-docs`, `finance-docs`, `company-docs`.
+- Buckets **privados**: `documents` (solo administración) e `incident-photos`.
 - Ruta: `{empresa}/{entidad}/{id}/{uuid}-{nombre}`. Políticas de Storage que
   consultan la tabla `documents` (mismas reglas que los datos).
+- Subida directa del navegador al almacenamiento con **URL firmada de un solo uso** emitida por el servidor tras comprobar el rol (sin límites de tamaño del servidor).
 - Descarga mediante **URL firmadas de corta duración** (60 s).
+- Fotos de incidencias: bucket `incident-photos`, cada trabajador solo puede escribir en su carpeta.
 - Tipos permitidos (PDF, JPG, PNG, HEIC, XLSX, DOCX) y tamaño máximo validados.
 
 **PWA**

@@ -7,13 +7,13 @@ import { Logo } from "@/components/brand/Logo";
 import { NotificationsMenu } from "./NotificationsMenu";
 import { WORKER_NAV, isActive } from "@/lib/navigation/nav";
 import { cn } from "@/lib/utils/cn";
-import type { DemoNotification } from "@/lib/demo/data";
+import type { NotificationItem } from "@/features/system/notifications";
 
 /**
  * Marco de la app del trabajador, pensada para el móvil:
  * cabecera mínima + barra inferior con 5 accesos grandes.
  */
-export function WorkerShell({ notifications, children }: { notifications: DemoNotification[]; children: ReactNode }) {
+export function WorkerShell({ notifications, children }: { notifications: NotificationItem[]; children: ReactNode }) {
   const pathname = usePathname();
   return (
     <div className="min-h-dvh bg-surface">

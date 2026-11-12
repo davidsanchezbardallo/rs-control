@@ -18,13 +18,13 @@ profundidad sutil), sin copiar su interfaz. Todos los valores viven en
 
 ## 2. Paleta
 
-> Azul y rojo **provisionales** hasta recibir el manual de identidad (D11).
+> Azul y rojo **exactos del logotipo oficial** de RS Instalaciones XXI.
 
 | Token | Valor | Uso | Contraste sobre blanco |
 |-------|-------|-----|------|
-| `brand-600` | `#1F5BD6` | **Azul RS.** Botón principal, enlaces, elementos activos | 5,96 |
+| `brand-600` | `#283582` | **Azul RS.** Botón principal, enlaces, elementos activos | 10,9 |
 | `brand-50…950` | escala | Fondos suaves (`50`), hover (`700`), panel de login (`950`) | — |
-| `accent-500` | `#E5303A` | **Rojo RS.** Solo identidad: logo, indicador del menú activo, notificación sin leer, líneas de acento | — |
+| `accent-500` | `#E2070F` | **Rojo RS.** Solo identidad: logo, indicador del menú activo, notificación sin leer, líneas de acento | — |
 | `canvas` | `#FFFFFF` | Fondo predominante | — |
 | `surface` | `#F5F5F7` | Barra lateral, campos, secciones | — |
 | `line` | `#E3E3E8` | Separadores y bordes finos | — |
@@ -34,8 +34,8 @@ profundidad sutil), sin copiar su interfaz. Todos los valores viven en
 | `subtle` | `#A1A1A6` | **Solo** iconos y placeholders (no texto) | 2,6 |
 | `success` | `#167234` | Positivo (cobrado, entregado) | 5,4 sobre su fondo |
 | `warning` | `#9C5300` | Advertencias (stock bajo, próximo a vencer) | 5,3 sobre su fondo |
-| `danger` | `#C4141F` | Errores y críticos (vencido, sin stock) | 5,3 sobre su fondo |
-| `series-1/2` | `#1F5BD6` / `#E8792F` | Gráficos (ingresos / gastos), validados para daltonismo | — |
+| `danger` | `#B42318` | Errores y críticos (vencido, sin stock) | 5,3 sobre su fondo |
+| `series-1/2` | `#3D52AD` / `#E8792F` | Gráficos (ingresos / gastos), validados para daltonismo | — |
 
 **Equilibrio azul/rojo:** el azul es el color de trabajo (≈ 90 % del color
 visible); el rojo aparece en pequeñas dosis que dan identidad (marca en el logo,
@@ -77,7 +77,7 @@ token diferente (`danger`), más oscuro, y siempre va con icono.
 | Aviso de datos de ejemplo | `components/ui/DemoNotice.tsx` | obligatorio mientras haya datos ficticios |
 | Marco de administración | `components/layout/AdminShell.tsx` | barra lateral, buscador, notificaciones, perfil; cajón en móvil |
 | Marco de trabajador | `components/layout/WorkerShell.tsx` | cabecera mínima + barra inferior de 5 accesos |
-| Logotipo provisional | `components/brand/Logo.tsx` | se sustituye en un único archivo |
+| Logotipo oficial (vectorial) | `components/brand/Logo.tsx`, `public/logo/rs-logo.svg` | redibujado del original |
 
 Previstos en Fase 2: tabla de datos (orden, filtros, paginación), selector con
 búsqueda, diálogo de confirmación, aviso emergente (toast), selector de fechas,

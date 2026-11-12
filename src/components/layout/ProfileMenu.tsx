@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ChevronDown, LogOut, Settings, UserRound } from "lucide-react";
 import { Popover } from "./Popover";
+import { logout } from "@/app/login/actions";
 
 export type ShellUser = { name: string; roleLabel: string; initials: string };
 
@@ -45,7 +46,12 @@ export function ProfileMenu({ user, profileHref }: { user: ShellUser; profileHre
       <MenuLink href={profileHref} icon={<UserRound className="h-4 w-4" />}>Mi perfil</MenuLink>
       <MenuLink href="/configuracion" icon={<Settings className="h-4 w-4" />}>Configuración</MenuLink>
       <div className="my-1 h-px bg-line" />
-      <MenuLink href="/login" icon={<LogOut className="h-4 w-4" />}>Cerrar sesión</MenuLink>
+      <form action={logout}>
+        <button type="submit" className="flex h-9 w-full items-center gap-2.5 rounded-[var(--radius-sm)] px-2.5 text-[13px] text-ink-2 hover:bg-surface hover:text-ink">
+          <span className="text-muted"><LogOut className="h-4 w-4" /></span>
+          Cerrar sesión
+        </button>
+      </form>
     </Popover>
   );
 }

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import { ServiceWorker } from "@/components/layout/ServiceWorker";
 
 // next/font descarga la fuente al compilar y la sirve desde nuestro dominio:
 // el navegador del usuario no contacta con Google (mejor para el RGPD).
@@ -29,7 +30,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="es" className={`${inter.variable} h-full antialiased`}>
-      <body className="min-h-full">{children}</body>
+      <body className="min-h-full">
+        {children}
+        <ServiceWorker />
+      </body>
     </html>
   );
 }
