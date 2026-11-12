@@ -29,6 +29,13 @@ antes de acciones arriesgadas o externas (GitHub, Supabase nube, Vercel).
 - Coste de material de obra = salidas − devoluciones aptas, a precio medio congelado.
 - Stock nunca negativo. Facturas: se emiten en Contasimple; aquí se registran.
 - Login con nombre de usuario (email técnico `usuario@USERNAME_EMAIL_DOMAIN`).
+- Bancos (Enable Banking, solo lectura): cuentas `sync_mode='bank'` toman el saldo del
+  banco y no admiten movimientos manuales; cobros/pagos se concilian. El identificador
+  de sesión del banco vive en `bank_connection_secrets` (sin políticas RLS) y solo lo
+  usa `src/features/banking/sync.ts` con el cliente de servicio, tras comprobar admin o
+  `CRON_SECRET`. Pruebas con `tests/mocks/enablebanking-mock.mjs`.
+- Producción: Supabase `kdvjzesjblsuvgelejjo` (UE) y Vercel `rs-control-pd4l.vercel.app`.
+  Las migraciones nuevas se aplican en producción SOLO con autorización del propietario.
 
 ## Convenciones de código
 - Next.js 16: leer `node_modules/next/dist/docs/` antes de usar APIs. `proxy.ts`

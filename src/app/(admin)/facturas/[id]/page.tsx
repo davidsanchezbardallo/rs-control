@@ -8,6 +8,9 @@ import { Card, CardBody, CardHeader } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { DescriptionList } from "@/components/ui/DescriptionList";
 import { Table, TBody, Td, Th, THead, Tr, EmptyRow } from "@/components/ui/Table";
+import { Landmark } from "lucide-react";
+import { ButtonLink } from "@/components/ui/Button";
+import { UnlinkButton } from "@/features/banking/components/forms";
 import { DocumentsCard } from "@/features/documents/components/DocumentsCard";
 import { EditInvoiceDialog, PaymentDialog, VoidInvoiceDialog } from "@/features/finance/components/forms";
 import { accountOptions, clientOptions, projectOptions, supplierOptions, todayISO } from "@/features/lookups";
@@ -22,7 +25,7 @@ export default async function Page(props: PageProps<"/facturas/[id]">) {
   const { data: i } = await supabase.from("v_invoices").select("*").eq("id", id).maybeSingle();
   if (!i) notFound();
   const [{ data: pays }, accounts, clients, suppliers, projects] = await Promise.all([
-    supabase.from("invoice_payments").select("id, amount, created_at, tx:financial_transactions(tx_date, description, account:bank_accounts(name))").eq("invoice_id", id).order("created_at"),
+    supabase.from("invoice_payments").select("id, amount, created_at, tx:financial_transactions(tx_date, description, source, account:bank_accounts(name))").eq("invoice_id", id).order("created_at"),
     accountOptions(supabase), clientOptions(supabase), supplierOptions(supabase), projectOptions(supabase),
   ]);
   const st = INVOICE_STATUS[i.status!]!;
@@ -41,6 +44,7 @@ export default async function Page(props: PageProps<"/facturas/[id]">) {
             <>
               {(pays?.length ?? 0) === 0 && <VoidInvoiceDialog id={id} />}
               <EditInvoiceDialog inv={raw as never} clients={clients} suppliers={suppliers} projects={projects} />
+              {Number(i.outstanding_amount) > 0.005 && <ButtonLink href={`/tesoreria/conciliacion?factura=${id}`} variant="secondary" icon={<Landmark className="h-4 w-4" />}>Buscar en el banco</ButtonLink>}
               {Number(i.outstanding_amount) > 0.005 && <PaymentDialog invoiceId={id} issued={issued} outstanding={Number(i.outstanding_amount)} accounts={accounts} today={todayISO()} />}
             </>
           ) : undefined
@@ -93,7 +97,7 @@ export default async function Page(props: PageProps<"/facturas/[id]">) {
           <THead><Th>Fecha</Th><Th>Cuenta</Th><Th>Concepto</Th><Th align="right">Importe</Th></THead>
           <TBody>
             {(pays ?? []).map((p) => (
-              <Tr key={p.id}><Td>{p.tx ? formatDate(p.tx.tx_date) : "—"}</Td><Td className="text-ink-2">{p.tx?.account?.name}</Td><Td className="text-ink-2">{p.tx?.description}</Td><Td align="right" className="font-medium">{formatCurrency(Number(p.amount))}</Td></Tr>
+              <Tr key={p.id}><Td>{p.tx ? formatDate(p.tx.tx_date) : "—"}</Td><Td className="text-ink-2">{p.tx?.account?.name}</Td><Td className="text-ink-2">{p.tx?.description}{p.tx?.source === "bank" && <> <Badge tone="brand">Banco</Badge> <UnlinkButton paymentId={p.id} /></>}</Td><Td align="right" className="font-medium">{formatCurrency(Number(p.amount))}</Td></Tr>
             ))}
             {!pays?.length && <EmptyRow cols={4}>Sin {issued ? "cobros" : "pagos"} registrados.</EmptyRow>}
           </TBody>

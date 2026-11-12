@@ -11,7 +11,7 @@ import { AccountDialog } from "@/features/finance/components/forms";
 import { NotAccounting, TreasuryTabs } from "@/features/finance/components/TreasuryTabs";
 import { buildForecast, type ForecastItem } from "@/features/finance/forecast";
 import { todayISO } from "@/features/lookups";
-import { formatCurrency, formatCurrencyRounded, formatDate, maskIban } from "@/lib/utils/format";
+import { formatCurrency, formatCurrencyRounded, formatDate, formatDateTime, maskIban } from "@/lib/utils/format";
 
 export const metadata: Metadata = { title: "Tesorería" };
 
@@ -53,11 +53,11 @@ export default async function Page() {
           <TBody>
             {(accounts ?? []).map((a) => (
               <Tr key={a.id!}>
-                <Td><Link href={`/tesoreria/movimientos?cuenta=${a.id}`} className="font-medium text-ink hover:text-brand-600">{a.name}</Link><p className="text-[12px] text-muted">{a.bank_name}{!a.is_active && " · inactiva"}</p></Td>
+                <Td><Link href={`/tesoreria/movimientos?cuenta=${a.id}`} className="font-medium text-ink hover:text-brand-600">{a.name}</Link><p className="flex flex-wrap items-center gap-1.5 text-[12px] text-muted">{a.bank_name}{!a.is_active && " · inactiva"}{a.sync_mode === "bank" ? <Badge tone="success">Automática{a.bank_balance_at ? ` · ${formatDateTime(a.bank_balance_at)}` : ""}</Badge> : <Badge>Manual</Badge>}</p></Td>
                 <Td className="font-mono text-[13px] text-ink-2">{a.iban ? maskIban(a.iban) : "—"}</Td>
                 <Td className="text-ink-2">{formatCurrency(Number(a.opening_balance))} <span className="text-muted">({formatDate(a.opening_date!)})</span></Td>
                 <Td align="right" className="text-[15px] font-semibold">{formatCurrency(Number(a.balance))}</Td>
-                <Td align="right"><AccountDialog a={a} /></Td>
+                <Td align="right"><AccountDialog a={{ ...a, sync_mode: undefined, bank_balance_at: undefined }} /></Td>
               </Tr>
             ))}
           </TBody>

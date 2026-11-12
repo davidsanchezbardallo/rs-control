@@ -83,7 +83,9 @@ export async function mapBankAccount(_: ActionState, fd: FormData): Promise<Acti
   if (error) return fail(error.code === "23505" ? "Esa cuenta de RS Control ya está vinculada a otra cuenta del banco." : friendlyError(error));
   const r = await syncConnection(link.connection_id, await psuFromRequest());
   refresh();
-  return { ok: !r.error, message: r.error ? `Vinculada, pero la primera descarga ha fallado: ${r.error}` : `Cuenta vinculada. ${r.imported} movimientos importados.` };
+  // El formulario desaparece al quedar vinculada: el resultado se muestra en la página
+  const msg = r.error ? `Vinculada, pero la primera descarga ha fallado: ${r.error}` : `Cuenta vinculada. ${r.imported} movimientos importados.`;
+  redirect(`/tesoreria/bancos/${link.connection_id}?${r.error ? "error" : "msg"}=${encodeURIComponent(msg)}`);
 }
 
 export async function syncNow(_: ActionState, fd: FormData): Promise<ActionState> {
@@ -110,7 +112,7 @@ export async function disconnectBank(_: ActionState, fd: FormData): Promise<Acti
   await db.from("bank_connection_secrets").delete().eq("connection_id", id);
   await db.from("bank_connections").update({ status: "revoked", last_error: null }).eq("id", id);
   refresh();
-  return { ok: true, message: "Conexión retirada. Los movimientos ya importados se conservan." };
+  redirect(`/tesoreria/bancos?msg=${encodeURIComponent("Conexión retirada. Los movimientos ya importados se conservan.")}`);
 }
 
 // ------------------------------------------------------------------ Conciliación
@@ -122,7 +124,9 @@ export async function linkTransaction(_: ActionState, fd: FormData): Promise<Act
   const { error } = await s.supabase.rpc("invoice_link_transaction", { p_invoice: p.data.invoice_id, p_transaction: p.data.transaction_id, p_amount: p.data.amount });
   if (error) return fail(friendlyError(error));
   refresh();
-  return { ok: true, message: "Conciliado." };
+  // El movimiento conciliado desaparece de la lista: el aviso se muestra en la página
+  const { data: inv } = await s.supabase.from("invoices").select("number").eq("id", p.data.invoice_id).single();
+  redirect(`/tesoreria/conciliacion?msg=${encodeURIComponent(`Conciliado con la factura ${inv?.number ?? ""}. Su estado ya está actualizado.`)}`);
 }
 
 export async function unlinkPayment(_: ActionState, fd: FormData): Promise<ActionState> {

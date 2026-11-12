@@ -18,13 +18,14 @@ como primer módulo) y probando cada parte.
 | 8 | Facturas: emitidas y recibidas, IVA (incl. inversión del sujeto pasivo), IRPF, retención de garantía, cobros/pagos parciales, importación CSV de Contasimple, documentación de empresa | ✅ |
 | 9 | Vehículos (ITV, seguro, revisiones, mantenimientos, asignación) y herramientas (entregas y devoluciones) | ✅ |
 | 10 | Panel con datos reales, informes (almacén, obras, finanzas, personal), exportación Excel, impresión/PDF, buscador general, notificaciones | ✅ |
-| 11 | Pruebas: 20 unitarias, 32 de seguridad/inventario en base de datos, 26 comprobaciones extremo a extremo en navegador | ✅ automáticas · ⏳ piloto con trabajadores |
-| 12 | Puesta en producción (Supabase Pro + Vercel Pro) | ⏳ **requiere vuestra autorización y cuentas** |
+| 11 | Pruebas: 28 unitarias, 50 de seguridad/inventario/bancos en base de datos, 26 + 14 comprobaciones extremo a extremo en navegador | ✅ automáticas · ⏳ piloto con trabajadores |
+| 12 | Puesta en producción (Supabase + Vercel) | ✅ publicada en https://rs-control-pd4l.vercel.app (planes gratuitos; pasar a Pro antes del uso diario) |
+| 13 | Conexión bancaria (Enable Banking): saldos y movimientos automáticos, conciliación con facturas | ✅ desarrollada y probada con banco simulado · ⏳ cuenta de Enable Banking |
 
 ## Pendiente antes de usar con datos reales
 
-1. Repositorio privado en GitHub (para guardar el código de forma permanente).
-2. Cuentas de Supabase y Vercel (ver `docs/06-operaciones.md`).
+1. ✅ Repositorio privado en GitHub. ✅ Supabase (UE) y Vercel en marcha.
+2. Cuenta de Enable Banking para la conexión con los bancos (ver `docs/06-operaciones.md`).
 3. Doble factor obligatorio para administradores (Supabase MFA) — recomendado antes de producción.
 4. Prueba piloto con 1–2 trabajadores en obra.
 5. Carga de datos reales: catálogo de materiales (desde vuestro Excel), obras activas,

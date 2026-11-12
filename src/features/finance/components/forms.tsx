@@ -230,7 +230,7 @@ export function EditInvoiceDialog(props: React.ComponentProps<typeof InvoiceForm
 
 export function PaymentDialog({ invoiceId, issued, outstanding, accounts, today }: { invoiceId: string; issued: boolean; outstanding: number; accounts: Option[]; today: string }) {
   return (
-    <Dialog trigger={issued ? "Registrar cobro" : "Registrar pago"} triggerIcon={<Wallet className="h-4 w-4" />} title={issued ? "Registrar cobro" : "Registrar pago"} description="Se crea el movimiento bancario y se actualiza el estado de la factura.">
+    <Dialog trigger={issued ? "Registrar cobro" : "Registrar pago"} triggerIcon={<Wallet className="h-4 w-4" />} title={issued ? "Registrar cobro" : "Registrar pago"} description="Para cuentas manuales. Si la cuenta está conectada al banco, usa «Buscar en el banco»: el movimiento ya se habrá importado.">
       {() => (
         <ActionForm action={registerPayment}>
           {(s) => (

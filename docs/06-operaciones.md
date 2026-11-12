@@ -76,7 +76,42 @@ npm run test:e2e
 5. *Deployment Protection*: proteger las previsualizaciones.
 6. Dominio propio opcional (p. ej. `control.<vuestro-dominio>.es`).
 
-## 4. Alta de usuarios
+## 4. Conexión con los bancos (Enable Banking)
+
+RS Control lee **saldos y movimientos** de las cuentas de empresa mediante banca
+abierta (PSD2), **solo lectura**: no puede mover dinero. Las claves del banco se
+escriben siempre en la web del banco, nunca en RS Control.
+
+Bancos comprobados: Santander, Sabadell, Cajamar y Caja Rural de Utrera.
+Préstamos y pólizas no se comparten por este sistema: siguen siendo manuales.
+
+**Puesta en marcha (una vez):**
+1. Crear cuenta en https://enablebanking.com/sign-in (con el email de la empresa).
+2. *Applications* → **Register new application**: entorno **Production**, nombre
+   `RS Control`, URL de retorno (*redirect URL*):
+   `https://rs-control-pd4l.vercel.app/api/banca/callback`, y el email de
+   protección de datos de la empresa. Elegir **generar la clave en el navegador**:
+   se descarga un archivo `.pem` (clave privada) y se muestra el **Application ID**.
+3. En la aplicación creada: **Activate by linking accounts** y vincular, una a
+   una, las cuentas de Santander, Sabadell, Cajamar y Caja Rural de Utrera
+   (modo restringido: sin contrato comercial, solo vuestras cuentas).
+4. En Vercel → *Settings → Environment Variables*, añadir:
+   `ENABLE_BANKING_APP_ID`, `ENABLE_BANKING_PRIVATE_KEY` (contenido completo del
+   `.pem`, marcada como sensible), `APP_URL` (`https://rs-control-pd4l.vercel.app`)
+   y `CRON_SECRET` (un texto largo aleatorio). Volver a desplegar.
+5. En RS Control → Tesorería → **Bancos** → «Conectar un banco», elegir el banco
+   y autorizar en su web. Las cuentas se reconocen por IBAN.
+
+**Funcionamiento:** actualización automática diaria (05:30 UTC) y botón
+«Actualizar ahora». Las cuentas conectadas toman el saldo del banco y no admiten
+movimientos manuales; los cobros y pagos de facturas se marcan en
+**Tesorería → Conciliación** (con propuestas automáticas). El permiso caduca a
+los ~180 días: la app avisa 15 días antes y se renueva conectando de nuevo.
+
+**Pruebas sin bancos reales:** `npm run mock:banco <clave-publica.pem>` arranca un
+banco simulado; `npm run test:e2e:banca` recorre todo el flujo.
+
+## 5. Alta de usuarios
 
 - **Trabajador**: Trabajadores → Nuevo trabajador → ficha → «Crear acceso a la app».
   Generar contraseña y entregarla en persona.
@@ -85,13 +120,13 @@ npm run test:e2e
   nada: el historial se conserva).
 - **Contraseña olvidada**: «Cambiar contraseña» en su ficha.
 
-## 5. Instalar la app en el móvil (PWA)
+## 6. Instalar la app en el móvil (PWA)
 
 - **iPhone (Safari)**: abrir la dirección → botón Compartir → «Añadir a pantalla de inicio».
 - **Android (Chrome)**: abrir la dirección → menú ⋮ → «Instalar aplicación».
 - **Ordenador (Chrome/Edge)**: icono de instalar en la barra de direcciones.
 
-## 6. Copias de seguridad y recuperación
+## 7. Copias de seguridad y recuperación
 
 | Qué | Cómo | Frecuencia |
 |-----|------|------------|
@@ -100,7 +135,7 @@ npm run test:e2e
 | Documentos y fotos | Sincronización del almacenamiento a disco/nube de RS (no van en las copias de Supabase) | Semanal |
 | Prueba de restauración | Restaurar en un proyecto de pruebas y ejecutar `inv_verify_balances()` | Cada 6 meses |
 
-## 7. Normativa (orientativo, a validar con la gestoría)
+## 8. Normativa (orientativo, a validar con la gestoría)
 
 - RS Control **no emite facturas** (lo hace Contasimple): no le aplica VERI\*FACTU.
 - Informar a los trabajadores del uso de la app y de los datos tratados (RGPD art. 13).

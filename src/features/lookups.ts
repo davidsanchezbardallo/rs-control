@@ -34,8 +34,9 @@ export async function unitOptions(supabase: Supabase): Promise<Option[]> {
   const { data } = await supabase.from("units").select("id, code, name").order("name");
   return (data ?? []).map((s) => ({ value: s.id, label: `${s.name} (${s.code})` }));
 }
+/** Cuentas para movimientos MANUALES (las automáticas se concilian con lo importado del banco). */
 export async function accountOptions(supabase: Supabase): Promise<Option[]> {
-  const { data } = await supabase.from("bank_accounts").select("id, name, bank_name").eq("is_active", true).order("name");
+  const { data } = await supabase.from("bank_accounts").select("id, name, bank_name").eq("is_active", true).eq("sync_mode", "manual").order("name");
   return (data ?? []).map((s) => ({ value: s.id, label: `${s.name}${s.bank_name ? ` · ${s.bank_name}` : ""}` }));
 }
 export async function vehicleOptions(supabase: Supabase): Promise<Option[]> {

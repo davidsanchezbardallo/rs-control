@@ -13,7 +13,9 @@
     "db:demo": "node --env-file=.env.local scripts/seed-demo.mjs",
     "db:types": "supabase gen types typescript --local > src/types/database.ts",
     "test:db": "supabase test db",
-    "test:e2e": "node tests/e2e/smoke.mjs http://localhost:3000"
+    "test:e2e": "node tests/e2e/smoke.mjs http://localhost:3000",
+    "test:e2e:banca": "node tests/e2e/banking.mjs http://localhost:3200 http://127.0.0.1:4010",
+    "mock:banco": "node tests/mocks/enablebanking-mock.mjs 4010"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

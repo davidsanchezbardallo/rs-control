@@ -216,3 +216,19 @@ Rechazada (con motivo) y Cancelada (por el trabajador si está pendiente) son fi
 | `vehicle_maintenance` | `vehicle_events` (mantenimientos, averías, ITV…) |
 | `audit_logs` + `activity_logs` | Se mantienen ambos con funciones distintas (técnico vs. legible) |
 | — | **Nuevas:** `employee_private`, `labor_cost_categories`, `time_entries`, `incidents`, `holidays`, `vacation_allowances`, `ppe_deliveries`, `trainings`, `units`, `invoice_payments`, `loan_installments`, `cash_forecast_items`, `number_sequences`, `role_permissions` |
+
+## 6. Conexión bancaria (migración 08)
+
+| Tabla / cambio | Propósito |
+|----------------|-----------|
+| `bank_accounts.sync_mode` (`manual`/`bank`), `bank_balance`, `bank_balance_at` | Modo de la cuenta y último saldo informado por el banco |
+| `financial_transactions.source` (`manual`/`bank`), `external_id`, `value_date`, `counterparty_name`, `bank_details` | Movimientos importados; `unique (account_id, external_id)` impide duplicados |
+| `bank_connections` | Banco, estado (pendiente, activa, caducada, error, desconectada), permiso hasta, `state` anti-falsificación |
+| `bank_connection_accounts` | Cuentas devueltas por el banco y su vínculo con cuentas de RS Control |
+| `bank_connection_secrets` | Identificador de sesión del banco. RLS **sin políticas**: solo el servidor puede leerlo |
+| `v_transactions_reconciliation` | Importe conciliado y pendiente de cada movimiento |
+| `invoice_link_transaction` / `invoice_unlink_payment` | Conciliar (y deshacer solo si el movimiento viene del banco) |
+
+Reglas: las cuentas automáticas no admiten movimientos manuales (trigger); el
+importe, fecha y cuenta de un movimiento importado no se pueden cambiar (solo su
+categoría y obra); los cobros manuales siguen siendo inmutables.

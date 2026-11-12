@@ -4,7 +4,8 @@ Aplicación de gestión empresarial de **RS Instalaciones XXI SL** (Utrera, Sevi
 almacén, obras, trabajadores, tesorería, facturas, vehículos, herramientas e informes
 en un único lugar. Aplicación web instalable (PWA) para ordenador, móvil y tablet.
 
-- **Administración (3 usuarios)**: acceso completo desde el ordenador (`/panel`).
+- **Administración (3 usuarios)**: acceso completo desde el ordenador (`/panel`),
+  con saldos y movimientos de los bancos actualizados automáticamente (solo lectura).
 - **Trabajadores**: app móvil sencilla (`/mi`) para solicitar material, confirmar
   recepciones, registrar salidas y devoluciones, indicar obra y vehículo y comunicar incidencias.
 
@@ -54,6 +55,7 @@ Usuarios de demostración (contraseña `Demo-RS-2026!`, solo en local): `admin1`
 | `npm test` | Pruebas unitarias (formatos, cálculos, validaciones, CSV) |
 | `npm run test:db` | Pruebas de seguridad (RLS) e inventario en la base de datos |
 | `npm run test:e2e` | Recorrido completo en navegador (con el servidor arrancado) |
+| `npm run test:e2e:banca` | Flujo bancario completo contra el banco simulado |
 | `npm run db:reset` | Reinicia la base de datos **local** con datos de demostración |
 | `npm run db:types` | Regenera los tipos TypeScript desde la base de datos |
 

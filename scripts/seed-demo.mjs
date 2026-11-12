@@ -24,6 +24,13 @@ if (!URL || !/127\.0\.0\.1|localhost/.test(URL)) {
 
 const admin = createClient(URL, SECRET, { auth: { persistSession: false } });
 
+// Espera a que la autenticación local esté lista (tras `supabase db reset` tarda unos segundos)
+for (let i = 0; i < 60; i++) {
+  const ok = await fetch(`${URL}/auth/v1/health`).then((r) => r.ok, () => false);
+  if (ok) break;
+  await new Promise((r) => setTimeout(r, 1000));
+}
+
 function must({ data, error }, what) {
   if (error) throw new Error(`${what}: ${error.message}`);
   return data;

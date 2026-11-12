@@ -22,7 +22,7 @@ export default async function Page(props: PageProps<"/tesoreria/movimientos">) {
   const { supabase } = await requireAdmin();
   const page = Math.max(1, Number(sp.page) || 1);
   const { from, to } = pageRange(page);
-  let q = supabase.from("financial_transactions").select("id, tx_date, amount, kind, category, description, status, void_reason, account:bank_accounts(name), project:projects(code)", { count: "exact" }).order("tx_date", { ascending: false }).order("created_at", { ascending: false });
+  let q = supabase.from("financial_transactions").select("id, tx_date, amount, kind, category, description, status, void_reason, source, counterparty_name, account:bank_accounts(name), project:projects(code)", { count: "exact" }).order("tx_date", { ascending: false }).order("created_at", { ascending: false });
   if (sp.cuenta) q = q.eq("account_id", sp.cuenta);
   if (sp.tipo) q = q.eq("kind", sp.tipo as never);
   if (sp.desde) q = q.gte("tx_date", sp.desde);
@@ -50,11 +50,11 @@ export default async function Page(props: PageProps<"/tesoreria/movimientos">) {
             {(data ?? []).map((t) => (
               <Tr key={t.id} className={cn(t.status === "void" && "opacity-50")}>
                 <Td className="whitespace-nowrap text-ink-2">{formatDate(t.tx_date)}</Td>
-                <Td><span className={cn(t.status === "void" && "line-through")}>{t.description}</span><p className="text-[12px] text-muted">{[t.category, t.project?.code, t.status === "void" ? `Anulado: ${t.void_reason}` : null].filter(Boolean).join(" · ")}</p></Td>
+                <Td><span className={cn(t.status === "void" && "line-through")}>{t.description}</span><p className="text-[12px] text-muted">{[t.counterparty_name, t.category, t.project?.code, t.status === "void" ? `Anulado: ${t.void_reason}` : null].filter(Boolean).join(" · ")}</p></Td>
                 <Td className="text-ink-2">{t.account?.name}</Td>
-                <Td><Badge>{TX_KIND[t.kind]}</Badge></Td>
+                <Td><span className="flex flex-wrap gap-1"><Badge>{TX_KIND[t.kind]}</Badge>{t.source === "bank" && <Badge tone="brand">Banco</Badge>}</span></Td>
                 <Td align="right" className={cn("font-medium", Number(t.amount) > 0 ? "text-success" : "text-ink")}>{formatCurrency(Number(t.amount))}</Td>
-                <Td align="right">{t.status === "confirmed" && <VoidTransactionDialog id={t.id} />}</Td>
+                <Td align="right">{t.status === "confirmed" && t.source === "manual" && <VoidTransactionDialog id={t.id} />}</Td>
               </Tr>
             ))}
             {!data?.length && <EmptyRow cols={6}>No hay movimientos con esos filtros.</EmptyRow>}
