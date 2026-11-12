@@ -7,6 +7,8 @@ export function TreasuryTabs({ active }: { active: string }) {
       items={[
         { href: "/tesoreria", label: "Resumen" },
         { href: "/tesoreria/movimientos", label: "Movimientos" },
+        { href: "/tesoreria/bancos", label: "Bancos" },
+        { href: "/tesoreria/conciliacion", label: "Conciliación" },
         { href: "/tesoreria/prevision", label: "Previsión" },
         { href: "/tesoreria/financiacion", label: "Financiación y compromisos" },
       ]}

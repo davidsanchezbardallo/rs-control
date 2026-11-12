@@ -7,7 +7,8 @@ import { NextResponse, type NextRequest } from "next/server";
  *  2. Si no hay sesión, redirige a /login.
  * La comprobación de ROL se hace en el servidor (layouts) y en la base de datos (RLS).
  */
-const PUBLIC_PATHS = ["/login", "/manifest.webmanifest", "/offline"];
+// /api/banca/sync: tarea programada; se protege con su propio secreto (CRON_SECRET)
+const PUBLIC_PATHS = ["/login", "/manifest.webmanifest", "/offline", "/api/banca/sync"];
 
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });

@@ -51,18 +51,96 @@ isOneToOne: false
                   ]
                 },"bank_accounts": {
                   Row: {
-                    "bank_name": string | null,"company_id": string,"created_at": string,"iban": string | null,"id": string,"is_active": boolean,"name": string,"opening_balance": number,"opening_date": string
+                    "bank_balance": number | null,"bank_balance_at": string | null,"bank_name": string | null,"company_id": string,"created_at": string,"iban": string | null,"id": string,"is_active": boolean,"name": string,"opening_balance": number,"opening_date": string,"sync_mode": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "bank_name"?: string | null,"company_id"?: string,"created_at"?: string,"iban"?: string | null,"id"?: string,"is_active"?: boolean,"name": string,"opening_balance"?: number,"opening_date"?: string
+                    "bank_balance"?: number | null,"bank_balance_at"?: string | null,"bank_name"?: string | null,"company_id"?: string,"created_at"?: string,"iban"?: string | null,"id"?: string,"is_active"?: boolean,"name": string,"opening_balance"?: number,"opening_date"?: string,"sync_mode"?: string
                   }
                   Update: {
-                    "bank_name"?: string | null,"company_id"?: string,"created_at"?: string,"iban"?: string | null,"id"?: string,"is_active"?: boolean,"name"?: string,"opening_balance"?: number,"opening_date"?: string
+                    "bank_balance"?: number | null,"bank_balance_at"?: string | null,"bank_name"?: string | null,"company_id"?: string,"created_at"?: string,"iban"?: string | null,"id"?: string,"is_active"?: boolean,"name"?: string,"opening_balance"?: number,"opening_date"?: string,"sync_mode"?: string
                   }
                   Relationships: [
                     {
       foreignKeyName: "bank_accounts_company_id_fkey"
+      columns: ["company_id"]
+isOneToOne: false
+      referencedRelation: "companies"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"bank_connection_accounts": {
+                  Row: {
+                    "bank_account_id": string | null,"company_id": string,"connection_id": string,"created_at": string,"currency": string | null,"external_uid": string,"iban": string | null,"id": string,"last_error": string | null,"last_synced_at": string | null,"name": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "bank_account_id"?: string | null,"company_id": string,"connection_id": string,"created_at"?: string,"currency"?: string | null,"external_uid": string,"iban"?: string | null,"id"?: string,"last_error"?: string | null,"last_synced_at"?: string | null,"name"?: string | null
+                  }
+                  Update: {
+                    "bank_account_id"?: string | null,"company_id"?: string,"connection_id"?: string,"created_at"?: string,"currency"?: string | null,"external_uid"?: string,"iban"?: string | null,"id"?: string,"last_error"?: string | null,"last_synced_at"?: string | null,"name"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "bank_connection_accounts_bank_account_id_fkey"
+      columns: ["bank_account_id"]
+isOneToOne: false
+      referencedRelation: "bank_accounts"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "bank_connection_accounts_bank_account_id_fkey"
+      columns: ["bank_account_id"]
+isOneToOne: false
+      referencedRelation: "v_bank_balances"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "bank_connection_accounts_company_id_fkey"
+      columns: ["company_id"]
+isOneToOne: false
+      referencedRelation: "companies"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "bank_connection_accounts_connection_id_fkey"
+      columns: ["connection_id"]
+isOneToOne: false
+      referencedRelation: "bank_connections"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"bank_connection_secrets": {
+                  Row: {
+                    "connection_id": string,"session_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "connection_id": string,"session_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "connection_id"?: string,"session_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "bank_connection_secrets_connection_id_fkey"
+      columns: ["connection_id"]
+isOneToOne: true
+      referencedRelation: "bank_connections"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"bank_connections": {
+                  Row: {
+                    "aspsp_country": string,"aspsp_name": string,"authorized_at": string | null,"company_id": string,"created_at": string,"created_by": string | null,"id": string,"last_error": string | null,"last_synced_at": string | null,"psu_type": string,"state": string,"status": Database["public"]['Enums']["bank_connection_status"],"valid_until": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "aspsp_country"?: string,"aspsp_name": string,"authorized_at"?: string | null,"company_id": string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"last_error"?: string | null,"last_synced_at"?: string | null,"psu_type"?: string,"state"?: string,"status"?: Database["public"]['Enums']["bank_connection_status"],"valid_until"?: string | null
+                  }
+                  Update: {
+                    "aspsp_country"?: string,"aspsp_name"?: string,"authorized_at"?: string | null,"company_id"?: string,"created_at"?: string,"created_by"?: string | null,"id"?: string,"last_error"?: string | null,"last_synced_at"?: string | null,"psu_type"?: string,"state"?: string,"status"?: Database["public"]['Enums']["bank_connection_status"],"valid_until"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "bank_connections_company_id_fkey"
       columns: ["company_id"]
 isOneToOne: false
       referencedRelation: "companies"
@@ -187,14 +265,14 @@ isOneToOne: false
                   ]
                 },"financial_transactions": {
                   Row: {
-                    "account_id": string,"amount": number,"category": string | null,"client_id": string | null,"company_id": string,"created_at": string,"created_by": string | null,"description": string,"id": string,"kind": Database["public"]['Enums']["transaction_kind"],"project_id": string | null,"status": Database["public"]['Enums']["transaction_status"],"supplier_id": string | null,"transfer_group": string | null,"tx_date": string,"void_reason": string | null
+                    "account_id": string,"amount": number,"bank_details": string | null,"category": string | null,"client_id": string | null,"company_id": string,"counterparty_name": string | null,"created_at": string,"created_by": string | null,"description": string,"external_id": string | null,"id": string,"kind": Database["public"]['Enums']["transaction_kind"],"project_id": string | null,"source": string,"status": Database["public"]['Enums']["transaction_status"],"supplier_id": string | null,"transfer_group": string | null,"tx_date": string,"value_date": string | null,"void_reason": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "account_id": string,"amount": number,"category"?: string | null,"client_id"?: string | null,"company_id"?: string,"created_at"?: string,"created_by"?: string | null,"description": string,"id"?: string,"kind": Database["public"]['Enums']["transaction_kind"],"project_id"?: string | null,"status"?: Database["public"]['Enums']["transaction_status"],"supplier_id"?: string | null,"transfer_group"?: string | null,"tx_date": string,"void_reason"?: string | null
+                    "account_id": string,"amount": number,"bank_details"?: string | null,"category"?: string | null,"client_id"?: string | null,"company_id"?: string,"counterparty_name"?: string | null,"created_at"?: string,"created_by"?: string | null,"description": string,"external_id"?: string | null,"id"?: string,"kind": Database["public"]['Enums']["transaction_kind"],"project_id"?: string | null,"source"?: string,"status"?: Database["public"]['Enums']["transaction_status"],"supplier_id"?: string | null,"transfer_group"?: string | null,"tx_date": string,"value_date"?: string | null,"void_reason"?: string | null
                   }
                   Update: {
-                    "account_id"?: string,"amount"?: number,"category"?: string | null,"client_id"?: string | null,"company_id"?: string,"created_at"?: string,"created_by"?: string | null,"description"?: string,"id"?: string,"kind"?: Database["public"]['Enums']["transaction_kind"],"project_id"?: string | null,"status"?: Database["public"]['Enums']["transaction_status"],"supplier_id"?: string | null,"transfer_group"?: string | null,"tx_date"?: string,"void_reason"?: string | null
+                    "account_id"?: string,"amount"?: number,"bank_details"?: string | null,"category"?: string | null,"client_id"?: string | null,"company_id"?: string,"counterparty_name"?: string | null,"created_at"?: string,"created_by"?: string | null,"description"?: string,"external_id"?: string | null,"id"?: string,"kind"?: Database["public"]['Enums']["transaction_kind"],"project_id"?: string | null,"source"?: string,"status"?: Database["public"]['Enums']["transaction_status"],"supplier_id"?: string | null,"transfer_group"?: string | null,"tx_date"?: string,"value_date"?: string | null,"void_reason"?: string | null
                   }
                   Relationships: [
                     {
@@ -388,6 +466,12 @@ isOneToOne: false
       columns: ["transaction_id"]
 isOneToOne: false
       referencedRelation: "financial_transactions"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "invoice_payments_transaction_id_fkey"
+      columns: ["transaction_id"]
+isOneToOne: false
+      referencedRelation: "v_transactions_reconciliation"
       referencedColumns: ["id"]
     }
                   ]
@@ -1270,7 +1354,7 @@ isOneToOne: false
                   ]
                 },"v_bank_balances": {
                   Row: {
-                    "balance": number | null,"bank_name": string | null,"iban": string | null,"id": string,"is_active": boolean,"name": string,"opening_balance": number,"opening_date": string
+                    "balance": number | null,"bank_balance_at": string | null,"bank_name": string | null,"iban": string | null,"id": string,"is_active": boolean,"name": string,"opening_balance": number,"opening_date": string,"sync_mode": string
                   }
                   ComputedFields: never
                   Relationships: [
@@ -1362,6 +1446,56 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"v_transactions_reconciliation": {
+                  Row: {
+                    "account_id": string,"account_name": string,"amount": number,"bank_details": string | null,"category": string | null,"client_id": string | null,"company_id": string,"counterparty_name": string | null,"created_at": string,"created_by": string | null,"description": string,"external_id": string | null,"id": string,"kind": Database["public"]['Enums']["transaction_kind"],"linked_amount": number | null,"project_id": string | null,"source": string,"status": Database["public"]['Enums']["transaction_status"],"supplier_id": string | null,"transfer_group": string | null,"tx_date": string,"unlinked_amount": number | null,"value_date": string | null,"void_reason": string | null
+                  }
+                  ComputedFields: never
+                  Relationships: [
+                    {
+      foreignKeyName: "financial_transactions_account_id_fkey"
+      columns: ["account_id"]
+isOneToOne: false
+      referencedRelation: "bank_accounts"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "financial_transactions_account_id_fkey"
+      columns: ["account_id"]
+isOneToOne: false
+      referencedRelation: "v_bank_balances"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "financial_transactions_client_id_fkey"
+      columns: ["client_id"]
+isOneToOne: false
+      referencedRelation: "clients"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "financial_transactions_company_id_fkey"
+      columns: ["company_id"]
+isOneToOne: false
+      referencedRelation: "companies"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "financial_transactions_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "financial_transactions_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "v_project_financials"
+      referencedColumns: ["project_id"]
+    },{
+      foreignKeyName: "financial_transactions_supplier_id_fkey"
+      columns: ["supplier_id"]
+isOneToOne: false
+      referencedRelation: "suppliers"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Functions: {
@@ -1406,8 +1540,14 @@ isOneToOne: false
               "balance": number,"material_id": string,"movements_sum": number
             }[]
                            },
+"invoice_link_transaction":
+{ Args: { "p_amount"?: number,"p_invoice": string,"p_transaction": string }; Returns: string
+                           },
 "invoice_register_payment":
 { Args: { "p_account": string,"p_amount": number,"p_date": string,"p_invoice": string,"p_notes"?: string }; Returns: string
+                           },
+"invoice_unlink_payment":
+{ Args: { "p_payment": string }; Returns: undefined
                            },
 "materials_search":
 { Args: { "p_limit"?: number,"p_query"?: string }; Returns: {
@@ -1445,7 +1585,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "absence_kind": "vacation"|"personal"|"paid_leave"|"sick_leave"|"other","absence_status": "requested"|"approved"|"rejected","app_role": "admin"|"worker","budget_kind": "initial"|"additional"|"certification","client_kind": "company"|"individual"|"community"|"public","commitment_kind": "rent"|"insurance"|"phone"|"software"|"renting"|"utilities"|"payroll"|"social_security"|"taxes"|"other","cost_category": "material"|"labor"|"subcontract"|"travel"|"rental"|"other","document_category": "contract"|"budget"|"certification"|"delivery_note"|"invoice"|"plan"|"photo"|"work_report"|"id_document"|"medical_fitness"|"training"|"prl"|"site_access"|"ppe"|"vehicle"|"insurance"|"company"|"other","employee_status": "active"|"leave"|"inactive","frequency": "monthly"|"quarterly"|"yearly","incident_severity": "low"|"medium"|"high","incident_status": "open"|"in_progress"|"resolved","inventory_kind": "purchase"|"issue"|"return"|"adjustment"|"reversal","invoice_destination": "project"|"stock"|"overhead","invoice_direction": "issued"|"received","loan_kind": "loan"|"credit_line"|"leasing"|"other","material_status": "active"|"discontinued","movement_type": "purchase_in"|"issue_out"|"return_in"|"return_damaged"|"adjust_in"|"adjust_out","project_status": "budgeted"|"pending_approval"|"approved"|"preparation"|"in_progress"|"paused"|"finished"|"closed","request_priority": "low"|"normal"|"high"|"urgent","request_status": "pending"|"in_review"|"approved"|"prepared"|"delivered"|"rejected"|"cancelled","tool_status": "available"|"assigned"|"repair"|"lost"|"retired","transaction_kind": "income"|"expense"|"transfer"|"fee"|"other","transaction_status": "confirmed"|"void","vat_regime": "general"|"reverse_charge"|"exempt","vehicle_event_kind": "maintenance"|"breakdown"|"repair"|"inspection"|"itv"|"other","vehicle_ownership": "owned"|"renting"|"leasing","vehicle_status": "active"|"workshop"|"inactive"
+            "absence_kind": "vacation"|"personal"|"paid_leave"|"sick_leave"|"other","absence_status": "requested"|"approved"|"rejected","app_role": "admin"|"worker","bank_connection_status": "pending"|"active"|"expired"|"error"|"revoked","budget_kind": "initial"|"additional"|"certification","client_kind": "company"|"individual"|"community"|"public","commitment_kind": "rent"|"insurance"|"phone"|"software"|"renting"|"utilities"|"payroll"|"social_security"|"taxes"|"other","cost_category": "material"|"labor"|"subcontract"|"travel"|"rental"|"other","document_category": "contract"|"budget"|"certification"|"delivery_note"|"invoice"|"plan"|"photo"|"work_report"|"id_document"|"medical_fitness"|"training"|"prl"|"site_access"|"ppe"|"vehicle"|"insurance"|"company"|"other","employee_status": "active"|"leave"|"inactive","frequency": "monthly"|"quarterly"|"yearly","incident_severity": "low"|"medium"|"high","incident_status": "open"|"in_progress"|"resolved","inventory_kind": "purchase"|"issue"|"return"|"adjustment"|"reversal","invoice_destination": "project"|"stock"|"overhead","invoice_direction": "issued"|"received","loan_kind": "loan"|"credit_line"|"leasing"|"other","material_status": "active"|"discontinued","movement_type": "purchase_in"|"issue_out"|"return_in"|"return_damaged"|"adjust_in"|"adjust_out","project_status": "budgeted"|"pending_approval"|"approved"|"preparation"|"in_progress"|"paused"|"finished"|"closed","request_priority": "low"|"normal"|"high"|"urgent","request_status": "pending"|"in_review"|"approved"|"prepared"|"delivered"|"rejected"|"cancelled","tool_status": "available"|"assigned"|"repair"|"lost"|"retired","transaction_kind": "income"|"expense"|"transfer"|"fee"|"other","transaction_status": "confirmed"|"void","vat_regime": "general"|"reverse_charge"|"exempt","vehicle_event_kind": "maintenance"|"breakdown"|"repair"|"inspection"|"itv"|"other","vehicle_ownership": "owned"|"renting"|"leasing","vehicle_status": "active"|"workshop"|"inactive"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -1565,7 +1705,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "absence_kind": ["vacation", "personal", "paid_leave", "sick_leave", "other"],"absence_status": ["requested", "approved", "rejected"],"app_role": ["admin", "worker"],"budget_kind": ["initial", "additional", "certification"],"client_kind": ["company", "individual", "community", "public"],"commitment_kind": ["rent", "insurance", "phone", "software", "renting", "utilities", "payroll", "social_security", "taxes", "other"],"cost_category": ["material", "labor", "subcontract", "travel", "rental", "other"],"document_category": ["contract", "budget", "certification", "delivery_note", "invoice", "plan", "photo", "work_report", "id_document", "medical_fitness", "training", "prl", "site_access", "ppe", "vehicle", "insurance", "company", "other"],"employee_status": ["active", "leave", "inactive"],"frequency": ["monthly", "quarterly", "yearly"],"incident_severity": ["low", "medium", "high"],"incident_status": ["open", "in_progress", "resolved"],"inventory_kind": ["purchase", "issue", "return", "adjustment", "reversal"],"invoice_destination": ["project", "stock", "overhead"],"invoice_direction": ["issued", "received"],"loan_kind": ["loan", "credit_line", "leasing", "other"],"material_status": ["active", "discontinued"],"movement_type": ["purchase_in", "issue_out", "return_in", "return_damaged", "adjust_in", "adjust_out"],"project_status": ["budgeted", "pending_approval", "approved", "preparation", "in_progress", "paused", "finished", "closed"],"request_priority": ["low", "normal", "high", "urgent"],"request_status": ["pending", "in_review", "approved", "prepared", "delivered", "rejected", "cancelled"],"tool_status": ["available", "assigned", "repair", "lost", "retired"],"transaction_kind": ["income", "expense", "transfer", "fee", "other"],"transaction_status": ["confirmed", "void"],"vat_regime": ["general", "reverse_charge", "exempt"],"vehicle_event_kind": ["maintenance", "breakdown", "repair", "inspection", "itv", "other"],"vehicle_ownership": ["owned", "renting", "leasing"],"vehicle_status": ["active", "workshop", "inactive"]
+            "absence_kind": ["vacation", "personal", "paid_leave", "sick_leave", "other"],"absence_status": ["requested", "approved", "rejected"],"app_role": ["admin", "worker"],"bank_connection_status": ["pending", "active", "expired", "error", "revoked"],"budget_kind": ["initial", "additional", "certification"],"client_kind": ["company", "individual", "community", "public"],"commitment_kind": ["rent", "insurance", "phone", "software", "renting", "utilities", "payroll", "social_security", "taxes", "other"],"cost_category": ["material", "labor", "subcontract", "travel", "rental", "other"],"document_category": ["contract", "budget", "certification", "delivery_note", "invoice", "plan", "photo", "work_report", "id_document", "medical_fitness", "training", "prl", "site_access", "ppe", "vehicle", "insurance", "company", "other"],"employee_status": ["active", "leave", "inactive"],"frequency": ["monthly", "quarterly", "yearly"],"incident_severity": ["low", "medium", "high"],"incident_status": ["open", "in_progress", "resolved"],"inventory_kind": ["purchase", "issue", "return", "adjustment", "reversal"],"invoice_destination": ["project", "stock", "overhead"],"invoice_direction": ["issued", "received"],"loan_kind": ["loan", "credit_line", "leasing", "other"],"material_status": ["active", "discontinued"],"movement_type": ["purchase_in", "issue_out", "return_in", "return_damaged", "adjust_in", "adjust_out"],"project_status": ["budgeted", "pending_approval", "approved", "preparation", "in_progress", "paused", "finished", "closed"],"request_priority": ["low", "normal", "high", "urgent"],"request_status": ["pending", "in_review", "approved", "prepared", "delivered", "rejected", "cancelled"],"tool_status": ["available", "assigned", "repair", "lost", "retired"],"transaction_kind": ["income", "expense", "transfer", "fee", "other"],"transaction_status": ["confirmed", "void"],"vat_regime": ["general", "reverse_charge", "exempt"],"vehicle_event_kind": ["maintenance", "breakdown", "repair", "inspection", "itv", "other"],"vehicle_ownership": ["owned", "renting", "leasing"],"vehicle_status": ["active", "workshop", "inactive"]
           }
         }
 } as const
