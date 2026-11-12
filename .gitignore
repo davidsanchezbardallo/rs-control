@@ -42,3 +42,6 @@ next-env.d.ts
 
 # las plantillas sin secretos sí se versionan
 !.env.example
+
+# copia de seguridad descargable del repositorio
+/rs-control.bundle
