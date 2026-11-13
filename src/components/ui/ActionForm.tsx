@@ -15,12 +15,17 @@ export function ActionForm({
   className,
   resetOnSuccess = false,
   onSuccess,
+  onSubmit,
+  noValidate,
 }: {
   action: (state: ActionState, fd: FormData) => Promise<ActionState>;
   children: ReactNode | ((state: ActionState) => ReactNode);
   className?: string;
   resetOnSuccess?: boolean;
   onSuccess?: () => void;
+  /** Para comprobaciones en el navegador antes de enviar (preventDefault cancela el envío). */
+  onSubmit?: (e: React.FormEvent<HTMLFormElement>) => void;
+  noValidate?: boolean;
 }) {
   const [state, formAction] = useActionState(action, idle);
   const ref = useRef<HTMLFormElement>(null);
@@ -31,7 +36,7 @@ export function ActionForm({
     }
   }, [state, resetOnSuccess, onSuccess]);
   return (
-    <form ref={ref} action={formAction} className={className ?? "space-y-4"}>
+    <form ref={ref} action={formAction} onSubmit={onSubmit} noValidate={noValidate} className={className ?? "space-y-4"}>
       {typeof children === "function" ? children(state) : children}
       <FormMessage state={state} />
     </form>

@@ -120,10 +120,13 @@ banco simulado; `npm run test:e2e:banca` recorre todo el flujo.
   comercial, lema/actividad, teléfonos y email (salen en la cabecera del PDF). En
   clientes y obras, completar provincia, C.P., representante legal y contacto en obra:
   así el parte se rellena solo.
-- **Trabajador** (móvil): *Partes → Nuevo parte* → elegir la obra → tipo de trabajo,
-  líneas con horas («Ahora» pone la hora actual), trabajo realizado → firma del cliente
-  y del técnico con el dedo → «Enviar a administración». Puede guardarlo como borrador
-  y corregirlo hasta que se valide.
+- **Trabajador** (móvil): *Partes → Nuevo parte* → elegir la obra (el cliente y la
+  instalación aparecen solos; no tiene que escribirlos) → tipo de trabajo, líneas con
+  horas («Ahora» pone la hora actual), trabajo realizado → **su firma (obligatoria)** y
+  la del cliente (opcional) con el dedo → «Enviar a administración». Si falta algo
+  obligatorio, la app lo avisa. Puede guardarlo como borrador y corregirlo hasta que se valide.
+- **Importante**: como el trabajador ya no escribe los datos del cliente, el PDF saldrá
+  con lo que haya en la ficha del **cliente** y de la **obra**. Completadlas una vez.
 - **Administración**: *Partes de trabajo* (filtros por estado, obra, trabajador y fechas)
   → revisar, corregir si hace falta, poner el **importe** (solo lo ve administración) y
   **Validar**. «Devolver para corregir» lo reabre al trabajador. También aparecen en la

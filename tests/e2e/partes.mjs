@@ -76,10 +76,20 @@ try {
   const opts = await w.getByLabel("Obra").locator("option").allTextContents();
   check(!opts.some((o) => o.includes("OB-2026-004")), "Solo aparecen obras activas");
   await w.getByLabel("Obra").selectOption({ label: opts.find((o) => o.includes("OB-2026-001")) });
-  await w.getByText("Datos del cliente").click();
-  await w.waitForFunction(() => document.querySelector('input[value="Constructora Ejemplo SL"]'));
-  check(true, "Al elegir la obra se rellenan los datos del cliente");
-  check((await w.getByLabel("Nombre comercial").inputValue()).includes("Residencial"), "…y los de la instalación");
+  await w.getByText("Constructora Ejemplo SL").waitFor();
+  check(await w.getByText("Calle Ejemplo 1").isVisible(), "Al elegir la obra se muestran solos el cliente y la instalación");
+  check((await w.getByLabel("Razón social / persona física").count()) === 0, "El trabajador no tiene que escribir NIF, dirección… del cliente");
+
+  // Enviar incompleto: aviso con lo que falta
+  await w.getByRole("button", { name: "Enviar a administración" }).click();
+  const dlg = w.getByRole("alertdialog");
+  await dlg.waitFor();
+  const msg = await dlg.innerText();
+  check(msg.includes("tipo de trabajo") && msg.includes("orden de trabajo") && msg.includes("firma del trabajador"), "Al enviar incompleto salta un aviso con lo que falta");
+  await shot(w, "42-parte-aviso", false);
+  await dlg.getByRole("button", { name: "Entendido, lo completo" }).click();
+  check(w.url().endsWith("/mi/partes/nuevo"), "…y el parte no se envía");
+
   await w.getByRole("button", { name: "Avería" }).click();
   await w.getByLabel("Trabajo 1").fill("Sustitución de diferencial en cuadro de zona común");
   await w.getByLabel("Hora inicio").fill("09:00");
@@ -87,10 +97,25 @@ try {
   check(await w.getByText("2,5 horas").first().isVisible(), "Calcula las horas (informativo)");
   await w.getByLabel("Trabajo realizado").fill("Se sustituye diferencial de 40 A y se comprueba disparo.");
   await w.getByRole("button", { name: "Básico" }).click();
-  await w.getByLabel("Nombre de quien firma por el cliente").fill("Encargado Demo");
+
+  // Firma dibujada pero sin aceptar: también avisa
+  const pad = w.getByLabel("Firma del trabajador: dibuja la firma");
+  await pad.evaluate((el) => el.scrollIntoView({ block: "center" }));
+  const pb = await pad.boundingBox();
+  await w.mouse.move(pb.x + 30, pb.y + 60);
+  await w.mouse.down();
+  await w.mouse.move(pb.x + 150, pb.y + 90, { steps: 5 });
+  await w.mouse.up();
+  await w.getByRole("button", { name: "Enviar a administración" }).click();
+  await dlg.waitFor();
+  check((await dlg.innerText()).includes("falta pulsar «Aceptar firma»"), "Avisa si la firma está dibujada pero sin aceptar");
+  await dlg.getByRole("button", { name: "Entendido, lo completo" }).click();
+  await w.getByRole("button", { name: "Borrar" }).first().click();
+
+  await sign(w, "Firma del trabajador");
+  await w.getByLabel("Nombre de quien firma por el cliente (opcional)").fill("Encargado Demo");
   await sign(w, "Firma del cliente");
-  await sign(w, "Firma de la empresa (técnico)");
-  check(true, "Firma del cliente y de la empresa con el dedo");
+  check(true, "Firma del trabajador (obligatoria) y del cliente (opcional) con el dedo");
   await shot(w, "40-parte-movil");
   await Promise.all([w.waitForURL(/\/mi\/partes\/[0-9a-f-]{36}\?ok=enviado/), w.getByRole("button", { name: "Enviar a administración" }).click()]);
   await w.getByText("Parte enviado a administración").waitFor();

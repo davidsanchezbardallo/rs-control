@@ -60,3 +60,27 @@ export function hoursBetween(start?: string | null, end?: string | null): number
   if (mins < 0) mins += 24 * 60;
   return Math.round((mins / 60) * 100) / 100;
 }
+
+/** Campos obligatorios para enviar (o guardar en firme) un parte. Los borradores no se comprueban. */
+export type MissingField = { field: "project_id" | "report_date" | "work_types" | "lines" | "company_signature_path"; message: string };
+export function missingForSubmit(d: {
+  project_id?: string | null;
+  report_date?: string | null;
+  work_types?: readonly string[] | null;
+  lines?: readonly { description?: string | null }[] | null;
+  company_signature_path?: string | null;
+}): MissingField[] {
+  const out: MissingField[] = [];
+  if (!d.project_id) out.push({ field: "project_id", message: "Elige la obra." });
+  if (!d.report_date) out.push({ field: "report_date", message: "Indica la fecha." });
+  if (!d.work_types?.length) out.push({ field: "work_types", message: "Marca al menos un tipo de trabajo." });
+  if (!d.lines?.some((l) => l.description?.trim())) out.push({ field: "lines", message: "Añade al menos un trabajo en la orden de trabajo." });
+  if (!d.company_signature_path) out.push({ field: "company_signature_path", message: "Falta la firma del trabajador." });
+  return out;
+}
+
+/** Datos del cliente y de la instalación que se copian de la ficha de la obra. */
+export const CLIENT_SITE_FIELDS = [
+  "client_name", "client_tax_id", "client_legal_rep", "client_legal_rep_tax_id", "client_address", "client_city", "client_province", "client_postal_code", "client_phone", "client_email",
+  "site_name", "site_contact", "site_address", "site_phone", "site_city", "site_province", "site_postal_code",
+] as const;

@@ -6,7 +6,7 @@ import { z } from "zod";
 import { getAdminOrNull, getSession } from "@/lib/auth/session";
 import { fail, friendlyError, invalid, type ActionState } from "@/lib/actions";
 import { optDecimal } from "@/lib/validations/common";
-import { workReportSchema } from "./schema";
+import { CLIENT_SITE_FIELDS, missingForSubmit, workReportSchema } from "./schema";
 
 const refresh = () => {
   revalidatePath("/mi", "layout");
@@ -54,7 +54,33 @@ export async function saveWorkReport(_: ActionState, fd: FormData): Promise<Acti
   }
 
   const { lines, intent: it, ...report } = p.data;
-  if (it === "submit" && !report.work_done && !lines.length) return fail("Describe el trabajo realizado o añade al menos una línea antes de enviar.");
+  // Obligatorios: obra, fecha, tipo de trabajo, orden de trabajo y firma del trabajador (la del cliente es opcional)
+  if (it !== "draft") {
+    const missing = missingForSubmit(p.data);
+    if (missing.length) {
+      return {
+        ok: false,
+        message: `Falta completar: ${missing.map((m) => m.message.replace(/\.$/, "").toLowerCase()).join(", ")}.`,
+        fieldErrors: Object.fromEntries(missing.map((m) => [m.field, [m.message]])),
+      };
+    }
+  }
+
+  // El trabajador no conoce los datos del cliente: se toman de la ficha de la obra.
+  // Al crear el parte o cambiar de obra se copian de la obra; si no, se conservan los guardados.
+  if (!isAdmin) {
+    let source: Record<string, unknown> | null = null;
+    if (report.id) {
+      const { data: cur } = await s.supabase.from("work_reports").select("*").eq("id", report.id).maybeSingle();
+      if (cur && cur.project_id === report.project_id) source = cur;
+    }
+    if (!source) {
+      const { data: pf } = await s.supabase.rpc("work_report_prefill", { p_project: report.project_id });
+      source = (pf as Record<string, unknown> | null) ?? {};
+    }
+    for (const k of CLIENT_SITE_FIELDS) (report as Record<string, unknown>)[k] = (source[k] as string | null | undefined) ?? null;
+  }
+
   const status = it === "submit" ? "submitted" : it === "draft" ? "draft" : undefined;
   const { data: id, error } = await s.supabase.rpc("work_report_save", {
     p_report: report,

@@ -1,6 +1,6 @@
 import { inflateSync } from "node:zlib";
 import { describe, expect, it } from "vitest";
-import { hoursBetween, workReportSchema } from "./schema";
+import { hoursBetween, missingForSubmit, workReportSchema } from "./schema";
 import { buildWorkReportPdf, type PdfInput } from "./pdf/build";
 
 /** Texto de un PDF de pdf-lib (flujos comprimidos con textos <hex> Tj). */
@@ -41,6 +41,13 @@ describe("partes de trabajo", () => {
     const ok = workReportSchema.safeParse({ project_id: "00000000-0000-4000-8000-000000000001", report_date: "2026-11-13", client_email: "", lines: [{ description: "x", start_time: "" }] });
     expect(ok.success && ok.data.client_email).toBe(null);
     expect(workReportSchema.safeParse({ project_id: "00000000-0000-4000-8000-000000000001", report_date: "2026-11-13", lines: [{ description: "x", start_time: "25:00" }] }).success).toBe(false);
+  });
+
+  it("exige obra, fecha, tipo, orden de trabajo y firma del trabajador (la del cliente no)", () => {
+    const fields = (d: Parameters<typeof missingForSubmit>[0]) => missingForSubmit(d).map((m) => m.field);
+    expect(fields({})).toEqual(["project_id", "report_date", "work_types", "lines", "company_signature_path"]);
+    expect(fields({ project_id: "x", report_date: "2026-11-13", work_types: ["breakdown"], lines: [{ description: "  " }], company_signature_path: "a/b.png" })).toEqual(["lines"]);
+    expect(fields({ project_id: "x", report_date: "2026-11-13", work_types: ["breakdown"], lines: [{ description: "Revisión" }], company_signature_path: "a/b.png" })).toEqual([]);
   });
 
   it("genera el PDF con la plantilla y sin importe para el trabajador", async () => {

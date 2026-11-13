@@ -28,7 +28,9 @@ antes de acciones arriesgadas o externas (GitHub, Supabase nube, Vercel).
   salidas/devoluciones directas, obra(s) y vehículo, incidencias. Sin vacaciones ni
   datos económicos.
 - Partes de trabajo: solo de obras activas; editables hasta que administración los
-  valida; horas solo informativas; importe en `work_report_billing` (solo admin, nunca
+  valida; el trabajador no escribe datos de cliente/instalación (el servidor los copia
+  de la obra, `saveWorkReport`); obligatorios al enviar: obra, fecha, tipo, orden de
+  trabajo y firma del trabajador (`missingForSubmit`); firma del cliente opcional; horas solo informativas; importe en `work_report_billing` (solo admin, nunca
   en pantallas ni PDF del trabajador); firmas PNG en el bucket privado `signatures`.
 - Coste de material de obra = salidas − devoluciones aptas, a precio medio congelado.
 - Stock nunca negativo. Facturas: se emiten en Contasimple; aquí se registran.
