@@ -112,7 +112,7 @@ console.log("· Clientes, proveedores y obras");
 const clients = must(
   await A.from("clients")
     .insert([
-      { kind: "company", name: "Constructora Ejemplo SL", tax_id: "B00000001", city: "Sevilla" },
+      { kind: "company", name: "Constructora Ejemplo SL", tax_id: "B00000001", address: "Avenida Ficticia 100", city: "Sevilla", province: "Sevilla", postal_code: "41000", legal_rep_name: "Representante Demo", legal_rep_tax_id: "00000000T", phone: "600000000", email: "obras@constructora.example" },
       { kind: "company", name: "Promotora Ficticia SA", tax_id: "A00000002", city: "Dos Hermanas" },
       { kind: "community", name: "C. P. Residencial Demo", tax_id: "H00000003", city: "Utrera" },
       { kind: "individual", name: "Cliente particular (demo)", city: "Utrera" },
@@ -132,7 +132,7 @@ const suppliers = must(
 );
 
 const projectRows = [
-  { code: "OB-2026-001", name: "Residencial Los Olivos · 24 viviendas", client_id: clients[0].id, work_type: "Obra nueva", address: "Calle Ejemplo 1", city: "Utrera", status: "in_progress", start_date: addDays(-120), planned_end_date: addDays(90), manager_employee_id: empByCode["T-001"] },
+  { code: "OB-2026-001", name: "Residencial Los Olivos · 24 viviendas", client_id: clients[0].id, work_type: "Obra nueva", address: "Calle Ejemplo 1", city: "Utrera", postal_code: "41710", site_contact_name: "Encargado Demo", site_contact_phone: "600000001", status: "in_progress", start_date: addDays(-120), planned_end_date: addDays(90), manager_employee_id: empByCode["T-001"] },
   { code: "OB-2026-002", name: "Nave logística Demo", client_id: clients[1].id, work_type: "Obra nueva", address: "Polígono Ficticio, parcela 7", city: "Dos Hermanas", status: "in_progress", start_date: addDays(-60), planned_end_date: addDays(150) },
   { code: "OB-2026-003", name: "CCTV y alarma comunidad", client_id: clients[2].id, work_type: "CCTV y alarmas", address: "Avenida Demo 12", city: "Utrera", status: "preparation", start_date: addDays(7), planned_end_date: addDays(40) },
   { code: "OB-2026-004", name: "Reforma eléctrica vivienda", client_id: clients[3].id, work_type: "Reforma", address: "Calle Ficticia 3", city: "Utrera", status: "in_progress", start_date: addDays(-90), planned_end_date: addDays(-30) },
@@ -429,6 +429,27 @@ must(await A.from("ppe_deliveries").insert([
   { employee_id: empByCode["T-001"], item: "Guantes dieléctricos clase 0", delivered_on: addDays(-170), next_renewal_on: addDays(10), acknowledged: true },
   { employee_id: empByCode["T-004"], item: "Botas de seguridad S3", delivered_on: addDays(-60), next_renewal_on: addDays(300), acknowledged: true },
 ], { defaultToNull: false }), "EPIs");
+
+console.log("· Partes de trabajo");
+must(await A.from("companies").update({ trade_name: "RS Instalaciones (demo)", tagline: "Instalaciones eléctricas, CCTV y alarmas", phone: "600000099", email: "info@empresa.example" }).eq("id", COMPANY), "empresa");
+const pf = must(await W1.rpc("work_report_prefill", { p_project: prj["OB-2026-001"] }), "datos del parte");
+const pfFields = { ...pf };
+delete pfFields.team;
+const pt1 = must(await W1.rpc("work_report_save", {
+  p_report: { ...pfFields, project_id: prj["OB-2026-001"], report_date: addDays(-2), work_types: ["installation"], work_done: "Tendido de líneas en planta 2 y conexionado del cuadro de vivienda 2B.", maintenance_type: "none", client_signer_name: "Encargado Demo" },
+  p_lines: [
+    { description: "Tendido de líneas planta 2", technician_name: "Luis Ejemplo Uno", start_time: "08:00", end_time: "12:00" },
+    { description: "Conexionado cuadro vivienda 2B", technician_name: "Luis Ejemplo Uno", start_time: "12:30", end_time: "15:00" },
+  ],
+  p_status: "submitted",
+}), "parte 1");
+must(await A.from("work_report_billing").insert({ report_id: pt1, amount: 320 }), "importe parte 1");
+must(await A.from("work_reports").update({ status: "validated" }).eq("id", pt1), "validar parte 1");
+must(await W1.rpc("work_report_save", {
+  p_report: { ...pfFields, project_id: prj["OB-2026-001"], report_date: addDays(0), work_types: ["breakdown"], work_done: "Revisión de diferencial que salta en zona común.", observations: "Pendiente de sustituir el diferencial de 40 A." },
+  p_lines: [{ description: "Localizar avería zona común", technician_name: "Luis Ejemplo Uno", start_time: "08:00", end_time: "09:30" }],
+  p_status: "submitted",
+}), "parte 2");
 
 const bad = must(await A.rpc("inv_verify_balances"), "verificación");
 if (bad.length) throw new Error("Saldos de stock descuadrados: " + JSON.stringify(bad));

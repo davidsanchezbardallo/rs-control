@@ -46,3 +46,17 @@ export function FilterSelect({ name, value, options, label }: { name: string; va
     </label>
   );
 }
+
+export function FilterDate({ name, value, label }: { name: string; value?: string; label: string }) {
+  return (
+    <label className="flex items-center gap-2 text-[13px] text-muted">
+      {label}
+      <input
+        type="date"
+        name={name}
+        defaultValue={value ?? ""}
+        className="h-10 rounded-[var(--radius-md)] bg-surface px-3 text-[14px] text-ink focus:ring-2 focus:ring-brand-500 focus:outline-none"
+      />
+    </label>
+  );
+}

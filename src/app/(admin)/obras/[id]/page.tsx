@@ -16,7 +16,7 @@ import { DocumentsCard } from "@/features/documents/components/DocumentsCard";
 import { AssignForm, BudgetItemDialog, EditProjectDialog, EndAssignmentButton, EstimatesDialog, ExpenseDialog, StatusForm } from "@/features/projects/components/forms";
 import { projectProfit } from "@/features/projects/finance";
 import { clientOptions, employeeOptions, todayISO } from "@/features/lookups";
-import { BUDGET_KIND, COST_CATEGORY, INCIDENT_STATUS, INVENTORY_KIND, PROJECT_STATUS, SEVERITY } from "@/lib/labels";
+import { BUDGET_KIND, COST_CATEGORY, INCIDENT_STATUS, WORK_REPORT_STATUS, INVENTORY_KIND, PROJECT_STATUS, SEVERITY } from "@/lib/labels";
 import { formatCurrency, formatCurrencyRounded, formatDate, formatDateTime, formatNumber, formatPercent } from "@/lib/utils/format";
 import { cn } from "@/lib/utils/cn";
 
@@ -64,6 +64,7 @@ export default async function Page(props: PageProps<"/obras/[id]">) {
           { href: `${base}?tab=economico`, label: "Económico" },
           { href: `${base}?tab=material`, label: "Material" },
           { href: `${base}?tab=documentos`, label: "Documentos" },
+          { href: `${base}?tab=partes`, label: "Partes" },
           { href: `${base}?tab=incidencias`, label: "Incidencias" },
           { href: `${base}?tab=historial`, label: "Historial" },
         ]}
@@ -72,6 +73,7 @@ export default async function Page(props: PageProps<"/obras/[id]">) {
       {tab === "economico" && <Economic id={id} f={f} employees={employees} />}
       {tab === "material" && <Material id={id} />}
       {tab === "documentos" && <DocumentsCard supabase={supabase} entity="project" entityId={id} title="Documentación de la obra" defaultCategory="plan" categories={["budget", "plan", "certification", "invoice", "photo", "work_report", "delivery_note", "contract", "site_access", "other"]} />}
+      {tab === "partes" && <WorkReports id={id} />}
       {tab === "incidencias" && <Incidents id={id} />}
       {tab === "historial" && <History id={id} />}
     </div>
@@ -313,6 +315,46 @@ async function Incidents({ id }: { id: string }) {
         ))}
         {!data?.length && <li className="px-6 py-8 text-center text-[14px] text-muted">Sin incidencias.</li>}
       </ul>
+    </Card>
+  );
+}
+
+async function WorkReports({ id }: { id: string }) {
+  const { supabase } = await requireAdmin();
+  const { data } = await supabase
+    .from("work_reports")
+    .select("id, number, report_date, status, work_done, employee:employees(first_name, last_name), lines:work_report_lines(hours), billing:work_report_billing(amount)")
+    .eq("project_id", id)
+    .order("report_date", { ascending: false });
+  const rows = data ?? [];
+  const hours = rows.reduce((s, r) => s + r.lines.reduce((a, l) => a + Number(l.hours ?? 0), 0), 0);
+  const amount = rows.reduce((s, r) => s + Number(r.billing?.amount ?? 0), 0);
+  return (
+    <Card>
+      <CardHeader
+        title="Partes de trabajo"
+        description={rows.length ? `${rows.length} partes · ${formatNumber(hours)} horas (informativo) · importes ${formatCurrency(amount)}` : "Los partes que hagan los trabajadores en esta obra aparecerán aquí."}
+        action={<ButtonLink href={`/partes?obra=${id}`} variant="ghost" size="sm">Ver en Partes</ButtonLink>}
+      />
+      <Table className="mt-3" minWidth={720}>
+        <THead><Th>Parte</Th><Th>Trabajador</Th><Th>Trabajo realizado</Th><Th className="text-right">Horas</Th><Th className="text-right">Importe</Th><Th>Estado</Th></THead>
+        <TBody>
+          {rows.map((r) => {
+            const h = r.lines.reduce((a, l) => a + Number(l.hours ?? 0), 0);
+            return (
+              <Tr key={r.id}>
+                <Td><Link className="font-medium text-ink hover:text-brand-600" href={`/partes/${r.id}`}>{r.number}</Link><p className="text-[12px] text-muted">{formatDate(r.report_date)}</p></Td>
+                <Td className="text-ink-2">{r.employee ? `${r.employee.first_name} ${r.employee.last_name}` : "Administración"}</Td>
+                <Td className="max-w-xs truncate text-ink-2">{r.work_done ?? "—"}</Td>
+                <Td className="tabular text-right">{h ? formatNumber(h) : "—"}</Td>
+                <Td className="tabular text-right">{r.billing?.amount == null ? "—" : formatCurrency(Number(r.billing.amount))}</Td>
+                <Td><Badge tone={WORK_REPORT_STATUS[r.status].tone}>{WORK_REPORT_STATUS[r.status].label}</Badge></Td>
+              </Tr>
+            );
+          })}
+          {!rows.length && <EmptyRow cols={6}>Sin partes de trabajo.</EmptyRow>}
+        </TBody>
+      </Table>
     </Card>
   );
 }

@@ -197,3 +197,18 @@ export function options<K extends string>(rec: Record<K, string | { label: strin
     return { value: k, label: typeof v === "string" ? v : v.label };
   });
 }
+
+// ---------------------------------------------------------------- Partes de trabajo
+export const WORK_TYPE: Record<string, string> = {
+  breakdown: "Avería",
+  installation: "Instalación",
+  renovation: "Reforma",
+  extension: "Ampliación",
+  image_processing: "Tratamiento imágenes",
+};
+export const MAINTENANCE_TYPE: Record<string, string> = { basic: "Básico", premium: "Premium", none: "Sin mantenimiento" };
+export const WORK_REPORT_STATUS: Labelled<E["work_report_status"]> = {
+  draft: { label: "Borrador", tone: "neutral" },
+  submitted: { label: "Enviado", tone: "brand" },
+  validated: { label: "Validado", tone: "success" },
+};

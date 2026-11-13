@@ -149,14 +149,14 @@ isOneToOne: false
                   ]
                 },"clients": {
                   Row: {
-                    "address": string | null,"city": string | null,"company_id": string,"contact_name": string | null,"created_at": string,"email": string | null,"id": string,"is_active": boolean,"kind": Database["public"]['Enums']["client_kind"],"name": string,"notes": string | null,"phone": string | null,"tax_id": string | null,"updated_at": string
+                    "address": string | null,"city": string | null,"company_id": string,"contact_name": string | null,"created_at": string,"email": string | null,"id": string,"is_active": boolean,"kind": Database["public"]['Enums']["client_kind"],"legal_rep_name": string | null,"legal_rep_tax_id": string | null,"name": string,"notes": string | null,"phone": string | null,"postal_code": string | null,"province": string | null,"tax_id": string | null,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "address"?: string | null,"city"?: string | null,"company_id"?: string,"contact_name"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"is_active"?: boolean,"kind"?: Database["public"]['Enums']["client_kind"],"name": string,"notes"?: string | null,"phone"?: string | null,"tax_id"?: string | null,"updated_at"?: string
+                    "address"?: string | null,"city"?: string | null,"company_id"?: string,"contact_name"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"is_active"?: boolean,"kind"?: Database["public"]['Enums']["client_kind"],"legal_rep_name"?: string | null,"legal_rep_tax_id"?: string | null,"name": string,"notes"?: string | null,"phone"?: string | null,"postal_code"?: string | null,"province"?: string | null,"tax_id"?: string | null,"updated_at"?: string
                   }
                   Update: {
-                    "address"?: string | null,"city"?: string | null,"company_id"?: string,"contact_name"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"is_active"?: boolean,"kind"?: Database["public"]['Enums']["client_kind"],"name"?: string,"notes"?: string | null,"phone"?: string | null,"tax_id"?: string | null,"updated_at"?: string
+                    "address"?: string | null,"city"?: string | null,"company_id"?: string,"contact_name"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"is_active"?: boolean,"kind"?: Database["public"]['Enums']["client_kind"],"legal_rep_name"?: string | null,"legal_rep_tax_id"?: string | null,"name"?: string,"notes"?: string | null,"phone"?: string | null,"postal_code"?: string | null,"province"?: string | null,"tax_id"?: string | null,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -169,14 +169,14 @@ isOneToOne: false
                   ]
                 },"companies": {
                   Row: {
-                    "address": string | null,"city": string | null,"created_at": string,"email": string | null,"id": string,"name": string,"phone": string | null,"settings": NonNullable<Json>,"tax_id": string | null,"updated_at": string
+                    "address": string | null,"city": string | null,"created_at": string,"email": string | null,"id": string,"name": string,"phone": string | null,"phone_2": string | null,"settings": NonNullable<Json>,"tagline": string | null,"tax_id": string | null,"trade_name": string | null,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "address"?: string | null,"city"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"name": string,"phone"?: string | null,"settings"?: NonNullable<Json>,"tax_id"?: string | null,"updated_at"?: string
+                    "address"?: string | null,"city"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"name": string,"phone"?: string | null,"phone_2"?: string | null,"settings"?: NonNullable<Json>,"tagline"?: string | null,"tax_id"?: string | null,"trade_name"?: string | null,"updated_at"?: string
                   }
                   Update: {
-                    "address"?: string | null,"city"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"name"?: string,"phone"?: string | null,"settings"?: NonNullable<Json>,"tax_id"?: string | null,"updated_at"?: string
+                    "address"?: string | null,"city"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"name"?: string,"phone"?: string | null,"phone_2"?: string | null,"settings"?: NonNullable<Json>,"tagline"?: string | null,"tax_id"?: string | null,"trade_name"?: string | null,"updated_at"?: string
                   }
                   Relationships: [
                     
@@ -951,14 +951,14 @@ isOneToOne: false
                   ]
                 },"projects": {
                   Row: {
-                    "actual_end_date": string | null,"address": string | null,"city": string | null,"client_id": string | null,"code": string,"company_id": string,"created_at": string,"created_by": string | null,"description": string | null,"id": string,"manager_employee_id": string | null,"name": string,"notes": string | null,"planned_end_date": string | null,"start_date": string | null,"status": Database["public"]['Enums']["project_status"],"updated_at": string,"work_type": string | null
+                    "actual_end_date": string | null,"address": string | null,"city": string | null,"client_id": string | null,"code": string,"company_id": string,"created_at": string,"created_by": string | null,"description": string | null,"id": string,"manager_employee_id": string | null,"name": string,"notes": string | null,"planned_end_date": string | null,"postal_code": string | null,"province": string | null,"site_contact_name": string | null,"site_contact_phone": string | null,"start_date": string | null,"status": Database["public"]['Enums']["project_status"],"updated_at": string,"work_type": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "actual_end_date"?: string | null,"address"?: string | null,"city"?: string | null,"client_id"?: string | null,"code": string,"company_id"?: string,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"id"?: string,"manager_employee_id"?: string | null,"name": string,"notes"?: string | null,"planned_end_date"?: string | null,"start_date"?: string | null,"status"?: Database["public"]['Enums']["project_status"],"updated_at"?: string,"work_type"?: string | null
+                    "actual_end_date"?: string | null,"address"?: string | null,"city"?: string | null,"client_id"?: string | null,"code": string,"company_id"?: string,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"id"?: string,"manager_employee_id"?: string | null,"name": string,"notes"?: string | null,"planned_end_date"?: string | null,"postal_code"?: string | null,"province"?: string | null,"site_contact_name"?: string | null,"site_contact_phone"?: string | null,"start_date"?: string | null,"status"?: Database["public"]['Enums']["project_status"],"updated_at"?: string,"work_type"?: string | null
                   }
                   Update: {
-                    "actual_end_date"?: string | null,"address"?: string | null,"city"?: string | null,"client_id"?: string | null,"code"?: string,"company_id"?: string,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"id"?: string,"manager_employee_id"?: string | null,"name"?: string,"notes"?: string | null,"planned_end_date"?: string | null,"start_date"?: string | null,"status"?: Database["public"]['Enums']["project_status"],"updated_at"?: string,"work_type"?: string | null
+                    "actual_end_date"?: string | null,"address"?: string | null,"city"?: string | null,"client_id"?: string | null,"code"?: string,"company_id"?: string,"created_at"?: string,"created_by"?: string | null,"description"?: string | null,"id"?: string,"manager_employee_id"?: string | null,"name"?: string,"notes"?: string | null,"planned_end_date"?: string | null,"postal_code"?: string | null,"province"?: string | null,"site_contact_name"?: string | null,"site_contact_phone"?: string | null,"start_date"?: string | null,"status"?: Database["public"]['Enums']["project_status"],"updated_at"?: string,"work_type"?: string | null
                   }
                   Relationships: [
                     {
@@ -1341,6 +1341,90 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"work_report_billing": {
+                  Row: {
+                    "amount": number | null,"company_id": string,"report_id": string,"updated_at": string,"updated_by": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "amount"?: number | null,"company_id"?: string,"report_id": string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Update: {
+                    "amount"?: number | null,"company_id"?: string,"report_id"?: string,"updated_at"?: string,"updated_by"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "work_report_billing_company_id_fkey"
+      columns: ["company_id"]
+isOneToOne: false
+      referencedRelation: "companies"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "work_report_billing_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: true
+      referencedRelation: "work_reports"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"work_report_lines": {
+                  Row: {
+                    "description": string,"end_time": string | null,"hours": number | null,"id": string,"position": number,"report_id": string,"start_time": string | null,"technician_name": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "description": string,"end_time"?: string | null,"hours"?: never,"id"?: string,"position"?: number,"report_id": string,"start_time"?: string | null,"technician_name"?: string | null
+                  }
+                  Update: {
+                    "description"?: string,"end_time"?: string | null,"hours"?: never,"id"?: string,"position"?: number,"report_id"?: string,"start_time"?: string | null,"technician_name"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "work_report_lines_report_id_fkey"
+      columns: ["report_id"]
+isOneToOne: false
+      referencedRelation: "work_reports"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"work_reports": {
+                  Row: {
+                    "client_address": string | null,"client_city": string | null,"client_email": string | null,"client_legal_rep": string | null,"client_legal_rep_tax_id": string | null,"client_name": string | null,"client_phone": string | null,"client_postal_code": string | null,"client_province": string | null,"client_signature_path": string | null,"client_signer_name": string | null,"client_tax_id": string | null,"company_id": string,"company_signature_path": string | null,"created_at": string,"created_by": string | null,"employee_id": string | null,"id": string,"maintenance_type": string | null,"number": string | null,"observations": string | null,"project_id": string,"report_date": string,"signed_at": string | null,"site_address": string | null,"site_city": string | null,"site_contact": string | null,"site_name": string | null,"site_phone": string | null,"site_postal_code": string | null,"site_province": string | null,"status": Database["public"]['Enums']["work_report_status"],"submitted_at": string | null,"updated_at": string,"validated_at": string | null,"validated_by": string | null,"work_done": string | null,"work_types": (string)[]
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "client_address"?: string | null,"client_city"?: string | null,"client_email"?: string | null,"client_legal_rep"?: string | null,"client_legal_rep_tax_id"?: string | null,"client_name"?: string | null,"client_phone"?: string | null,"client_postal_code"?: string | null,"client_province"?: string | null,"client_signature_path"?: string | null,"client_signer_name"?: string | null,"client_tax_id"?: string | null,"company_id"?: string,"company_signature_path"?: string | null,"created_at"?: string,"created_by"?: string | null,"employee_id"?: string | null,"id"?: string,"maintenance_type"?: string | null,"number"?: string | null,"observations"?: string | null,"project_id": string,"report_date"?: string,"signed_at"?: string | null,"site_address"?: string | null,"site_city"?: string | null,"site_contact"?: string | null,"site_name"?: string | null,"site_phone"?: string | null,"site_postal_code"?: string | null,"site_province"?: string | null,"status"?: Database["public"]['Enums']["work_report_status"],"submitted_at"?: string | null,"updated_at"?: string,"validated_at"?: string | null,"validated_by"?: string | null,"work_done"?: string | null,"work_types"?: (string)[]
+                  }
+                  Update: {
+                    "client_address"?: string | null,"client_city"?: string | null,"client_email"?: string | null,"client_legal_rep"?: string | null,"client_legal_rep_tax_id"?: string | null,"client_name"?: string | null,"client_phone"?: string | null,"client_postal_code"?: string | null,"client_province"?: string | null,"client_signature_path"?: string | null,"client_signer_name"?: string | null,"client_tax_id"?: string | null,"company_id"?: string,"company_signature_path"?: string | null,"created_at"?: string,"created_by"?: string | null,"employee_id"?: string | null,"id"?: string,"maintenance_type"?: string | null,"number"?: string | null,"observations"?: string | null,"project_id"?: string,"report_date"?: string,"signed_at"?: string | null,"site_address"?: string | null,"site_city"?: string | null,"site_contact"?: string | null,"site_name"?: string | null,"site_phone"?: string | null,"site_postal_code"?: string | null,"site_province"?: string | null,"status"?: Database["public"]['Enums']["work_report_status"],"submitted_at"?: string | null,"updated_at"?: string,"validated_at"?: string | null,"validated_by"?: string | null,"work_done"?: string | null,"work_types"?: (string)[]
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "work_reports_company_id_fkey"
+      columns: ["company_id"]
+isOneToOne: false
+      referencedRelation: "companies"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "work_reports_employee_id_fkey"
+      columns: ["employee_id"]
+isOneToOne: false
+      referencedRelation: "employees"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "work_reports_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "work_reports_project_id_fkey"
+      columns: ["project_id"]
+isOneToOne: false
+      referencedRelation: "v_project_financials"
+      referencedColumns: ["project_id"]
+    }
+                  ]
                 }
           }
           Views: {
@@ -1574,6 +1658,12 @@ isOneToOne: false
 "tool_return":
 { Args: { "p_condition"?: string,"p_status"?: Database["public"]['Enums']["tool_status"],"p_tool": string }; Returns: undefined
                            },
+"work_report_prefill":
+{ Args: { "p_project": string }; Returns: Json
+                           },
+"work_report_save":
+{ Args: { "p_lines": Json,"p_report": Json,"p_status"?: Database["public"]['Enums']["work_report_status"] }; Returns: string
+                           },
 "worker_join_project":
 { Args: { "p_project": string }; Returns: undefined
                            },
@@ -1585,7 +1675,7 @@ isOneToOne: false
                            }
           }
           Enums: {
-            "absence_kind": "vacation"|"personal"|"paid_leave"|"sick_leave"|"other","absence_status": "requested"|"approved"|"rejected","app_role": "admin"|"worker","bank_connection_status": "pending"|"active"|"expired"|"error"|"revoked","budget_kind": "initial"|"additional"|"certification","client_kind": "company"|"individual"|"community"|"public","commitment_kind": "rent"|"insurance"|"phone"|"software"|"renting"|"utilities"|"payroll"|"social_security"|"taxes"|"other","cost_category": "material"|"labor"|"subcontract"|"travel"|"rental"|"other","document_category": "contract"|"budget"|"certification"|"delivery_note"|"invoice"|"plan"|"photo"|"work_report"|"id_document"|"medical_fitness"|"training"|"prl"|"site_access"|"ppe"|"vehicle"|"insurance"|"company"|"other","employee_status": "active"|"leave"|"inactive","frequency": "monthly"|"quarterly"|"yearly","incident_severity": "low"|"medium"|"high","incident_status": "open"|"in_progress"|"resolved","inventory_kind": "purchase"|"issue"|"return"|"adjustment"|"reversal","invoice_destination": "project"|"stock"|"overhead","invoice_direction": "issued"|"received","loan_kind": "loan"|"credit_line"|"leasing"|"other","material_status": "active"|"discontinued","movement_type": "purchase_in"|"issue_out"|"return_in"|"return_damaged"|"adjust_in"|"adjust_out","project_status": "budgeted"|"pending_approval"|"approved"|"preparation"|"in_progress"|"paused"|"finished"|"closed","request_priority": "low"|"normal"|"high"|"urgent","request_status": "pending"|"in_review"|"approved"|"prepared"|"delivered"|"rejected"|"cancelled","tool_status": "available"|"assigned"|"repair"|"lost"|"retired","transaction_kind": "income"|"expense"|"transfer"|"fee"|"other","transaction_status": "confirmed"|"void","vat_regime": "general"|"reverse_charge"|"exempt","vehicle_event_kind": "maintenance"|"breakdown"|"repair"|"inspection"|"itv"|"other","vehicle_ownership": "owned"|"renting"|"leasing","vehicle_status": "active"|"workshop"|"inactive"
+            "absence_kind": "vacation"|"personal"|"paid_leave"|"sick_leave"|"other","absence_status": "requested"|"approved"|"rejected","app_role": "admin"|"worker","bank_connection_status": "pending"|"active"|"expired"|"error"|"revoked","budget_kind": "initial"|"additional"|"certification","client_kind": "company"|"individual"|"community"|"public","commitment_kind": "rent"|"insurance"|"phone"|"software"|"renting"|"utilities"|"payroll"|"social_security"|"taxes"|"other","cost_category": "material"|"labor"|"subcontract"|"travel"|"rental"|"other","document_category": "contract"|"budget"|"certification"|"delivery_note"|"invoice"|"plan"|"photo"|"work_report"|"id_document"|"medical_fitness"|"training"|"prl"|"site_access"|"ppe"|"vehicle"|"insurance"|"company"|"other","employee_status": "active"|"leave"|"inactive","frequency": "monthly"|"quarterly"|"yearly","incident_severity": "low"|"medium"|"high","incident_status": "open"|"in_progress"|"resolved","inventory_kind": "purchase"|"issue"|"return"|"adjustment"|"reversal","invoice_destination": "project"|"stock"|"overhead","invoice_direction": "issued"|"received","loan_kind": "loan"|"credit_line"|"leasing"|"other","material_status": "active"|"discontinued","movement_type": "purchase_in"|"issue_out"|"return_in"|"return_damaged"|"adjust_in"|"adjust_out","project_status": "budgeted"|"pending_approval"|"approved"|"preparation"|"in_progress"|"paused"|"finished"|"closed","request_priority": "low"|"normal"|"high"|"urgent","request_status": "pending"|"in_review"|"approved"|"prepared"|"delivered"|"rejected"|"cancelled","tool_status": "available"|"assigned"|"repair"|"lost"|"retired","transaction_kind": "income"|"expense"|"transfer"|"fee"|"other","transaction_status": "confirmed"|"void","vat_regime": "general"|"reverse_charge"|"exempt","vehicle_event_kind": "maintenance"|"breakdown"|"repair"|"inspection"|"itv"|"other","vehicle_ownership": "owned"|"renting"|"leasing","vehicle_status": "active"|"workshop"|"inactive","work_report_status": "draft"|"submitted"|"validated"
           }
           CompositeTypes: {
             [_ in never]: never
@@ -1705,7 +1795,7 @@ export const Constants = {
           }
         },"public": {
           Enums: {
-            "absence_kind": ["vacation", "personal", "paid_leave", "sick_leave", "other"],"absence_status": ["requested", "approved", "rejected"],"app_role": ["admin", "worker"],"bank_connection_status": ["pending", "active", "expired", "error", "revoked"],"budget_kind": ["initial", "additional", "certification"],"client_kind": ["company", "individual", "community", "public"],"commitment_kind": ["rent", "insurance", "phone", "software", "renting", "utilities", "payroll", "social_security", "taxes", "other"],"cost_category": ["material", "labor", "subcontract", "travel", "rental", "other"],"document_category": ["contract", "budget", "certification", "delivery_note", "invoice", "plan", "photo", "work_report", "id_document", "medical_fitness", "training", "prl", "site_access", "ppe", "vehicle", "insurance", "company", "other"],"employee_status": ["active", "leave", "inactive"],"frequency": ["monthly", "quarterly", "yearly"],"incident_severity": ["low", "medium", "high"],"incident_status": ["open", "in_progress", "resolved"],"inventory_kind": ["purchase", "issue", "return", "adjustment", "reversal"],"invoice_destination": ["project", "stock", "overhead"],"invoice_direction": ["issued", "received"],"loan_kind": ["loan", "credit_line", "leasing", "other"],"material_status": ["active", "discontinued"],"movement_type": ["purchase_in", "issue_out", "return_in", "return_damaged", "adjust_in", "adjust_out"],"project_status": ["budgeted", "pending_approval", "approved", "preparation", "in_progress", "paused", "finished", "closed"],"request_priority": ["low", "normal", "high", "urgent"],"request_status": ["pending", "in_review", "approved", "prepared", "delivered", "rejected", "cancelled"],"tool_status": ["available", "assigned", "repair", "lost", "retired"],"transaction_kind": ["income", "expense", "transfer", "fee", "other"],"transaction_status": ["confirmed", "void"],"vat_regime": ["general", "reverse_charge", "exempt"],"vehicle_event_kind": ["maintenance", "breakdown", "repair", "inspection", "itv", "other"],"vehicle_ownership": ["owned", "renting", "leasing"],"vehicle_status": ["active", "workshop", "inactive"]
+            "absence_kind": ["vacation", "personal", "paid_leave", "sick_leave", "other"],"absence_status": ["requested", "approved", "rejected"],"app_role": ["admin", "worker"],"bank_connection_status": ["pending", "active", "expired", "error", "revoked"],"budget_kind": ["initial", "additional", "certification"],"client_kind": ["company", "individual", "community", "public"],"commitment_kind": ["rent", "insurance", "phone", "software", "renting", "utilities", "payroll", "social_security", "taxes", "other"],"cost_category": ["material", "labor", "subcontract", "travel", "rental", "other"],"document_category": ["contract", "budget", "certification", "delivery_note", "invoice", "plan", "photo", "work_report", "id_document", "medical_fitness", "training", "prl", "site_access", "ppe", "vehicle", "insurance", "company", "other"],"employee_status": ["active", "leave", "inactive"],"frequency": ["monthly", "quarterly", "yearly"],"incident_severity": ["low", "medium", "high"],"incident_status": ["open", "in_progress", "resolved"],"inventory_kind": ["purchase", "issue", "return", "adjustment", "reversal"],"invoice_destination": ["project", "stock", "overhead"],"invoice_direction": ["issued", "received"],"loan_kind": ["loan", "credit_line", "leasing", "other"],"material_status": ["active", "discontinued"],"movement_type": ["purchase_in", "issue_out", "return_in", "return_damaged", "adjust_in", "adjust_out"],"project_status": ["budgeted", "pending_approval", "approved", "preparation", "in_progress", "paused", "finished", "closed"],"request_priority": ["low", "normal", "high", "urgent"],"request_status": ["pending", "in_review", "approved", "prepared", "delivered", "rejected", "cancelled"],"tool_status": ["available", "assigned", "repair", "lost", "retired"],"transaction_kind": ["income", "expense", "transfer", "fee", "other"],"transaction_status": ["confirmed", "void"],"vat_regime": ["general", "reverse_charge", "exempt"],"vehicle_event_kind": ["maintenance", "breakdown", "repair", "inspection", "itv", "other"],"vehicle_ownership": ["owned", "renting", "leasing"],"vehicle_status": ["active", "workshop", "inactive"],"work_report_status": ["draft", "submitted", "validated"]
           }
         }
 } as const

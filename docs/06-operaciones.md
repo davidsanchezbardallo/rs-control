@@ -114,7 +114,23 @@ los ~180 días: la app avisa 15 días antes y se renueva conectando de nuevo.
 **Pruebas sin bancos reales:** `npm run mock:banco <clave-publica.pem>` arranca un
 banco simulado; `npm run test:e2e:banca` recorre todo el flujo.
 
-## 5. Alta de usuarios
+## 5. Partes de trabajo
+
+- **Antes de empezar**: en *Configuración → Datos de la empresa* rellenar nombre
+  comercial, lema/actividad, teléfonos y email (salen en la cabecera del PDF). En
+  clientes y obras, completar provincia, C.P., representante legal y contacto en obra:
+  así el parte se rellena solo.
+- **Trabajador** (móvil): *Partes → Nuevo parte* → elegir la obra → tipo de trabajo,
+  líneas con horas («Ahora» pone la hora actual), trabajo realizado → firma del cliente
+  y del técnico con el dedo → «Enviar a administración». Puede guardarlo como borrador
+  y corregirlo hasta que se valide.
+- **Administración**: *Partes de trabajo* (filtros por estado, obra, trabajador y fechas)
+  → revisar, corregir si hace falta, poner el **importe** (solo lo ve administración) y
+  **Validar**. «Devolver para corregir» lo reabre al trabajador. También aparecen en la
+  pestaña *Partes* de cada obra.
+- **PDF**: botón «Descargar PDF» en cada parte (el del trabajador no lleva importe).
+
+## 6. Alta de usuarios
 
 - **Trabajador**: Trabajadores → Nuevo trabajador → ficha → «Crear acceso a la app».
   Generar contraseña y entregarla en persona.
@@ -123,13 +139,13 @@ banco simulado; `npm run test:e2e:banca` recorre todo el flujo.
   nada: el historial se conserva).
 - **Contraseña olvidada**: «Cambiar contraseña» en su ficha.
 
-## 6. Instalar la app en el móvil (PWA)
+## 7. Instalar la app en el móvil (PWA)
 
 - **iPhone (Safari)**: abrir la dirección → botón Compartir → «Añadir a pantalla de inicio».
 - **Android (Chrome)**: abrir la dirección → menú ⋮ → «Instalar aplicación».
 - **Ordenador (Chrome/Edge)**: icono de instalar en la barra de direcciones.
 
-## 7. Copias de seguridad y recuperación
+## 8. Copias de seguridad y recuperación
 
 | Qué | Cómo | Frecuencia |
 |-----|------|------------|
@@ -138,7 +154,7 @@ banco simulado; `npm run test:e2e:banca` recorre todo el flujo.
 | Documentos y fotos | Sincronización del almacenamiento a disco/nube de RS (no van en las copias de Supabase) | Semanal |
 | Prueba de restauración | Restaurar en un proyecto de pruebas y ejecutar `inv_verify_balances()` | Cada 6 meses |
 
-## 8. Normativa (orientativo, a validar con la gestoría)
+## 9. Normativa (orientativo, a validar con la gestoría)
 
 - RS Control **no emite facturas** (lo hace Contasimple): no le aplica VERI\*FACTU.
 - Informar a los trabajadores del uso de la app y de los datos tratados (RGPD art. 13).

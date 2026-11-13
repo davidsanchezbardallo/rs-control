@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { PackagePlus } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpFromLine, PackagePlus, Undo2 } from "lucide-react";
 import { requireUser } from "@/lib/auth/session";
 import { WorkerPage } from "@/components/layout/WorkerPage";
 import { BigAction, ListRow, OkBanner, SectionTitle } from "@/components/layout/WorkerUi";
@@ -20,9 +21,14 @@ export default async function Page(props: PageProps<"/mi/material">) {
     supabase.from("material_requests").select("id, number, status, created_at, project:projects(name), items:material_request_items(id)").order("created_at", { ascending: false }).limit(50),
   ]);
   return (
-    <WorkerPage title="Material" subtitle="Solicitudes y recepciones">
+    <WorkerPage title="Material" subtitle="Solicitudes, retiradas y devoluciones">
       {sp.ok && <OkBanner>Solicitud enviada. Administración ya la ha recibido.</OkBanner>}
       <BigAction primary href="/mi/material/solicitar" icon={<PackagePlus className="h-6 w-6" />} title="Nueva solicitud" subtitle="Elige obra, materiales y cantidades" />
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <BigAction href="/mi/movimientos/salida" icon={<ArrowUpFromLine className="h-6 w-6" />} title="Retirar material" subtitle="Me llevo material de la nave" />
+        <BigAction href="/mi/movimientos/devolucion" icon={<Undo2 className="h-6 w-6" />} title="Devolver material" subtitle="Traigo material sobrante" />
+      </div>
+      <Link href="/mi/movimientos" className="block px-1 text-[14px] font-medium text-brand-600">Ver mis retiradas y devoluciones</Link>
       {receptions.length > 0 && (
         <section className="space-y-3">
           <SectionTitle>Pendiente de confirmar</SectionTitle>

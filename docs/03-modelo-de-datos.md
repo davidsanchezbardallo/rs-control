@@ -232,3 +232,19 @@ Rechazada (con motivo) y Cancelada (por el trabajador si está pendiente) son fi
 Reglas: las cuentas automáticas no admiten movimientos manuales (trigger); el
 importe, fecha y cuenta de un movimiento importado no se pueden cambiar (solo su
 categoría y obra); los cobros manuales siguen siendo inmutables.
+
+## 7. Partes de trabajo (migración 09)
+
+| Tabla / cambio | Propósito |
+|----------------|-----------|
+| `work_reports` | Parte técnico: número `PT-AAAA-NNNN`, obra (obligatoria), trabajador, fecha, tipos (avería, instalación, reforma, ampliación, tratamiento de imágenes), **copia** de los datos de cliente e instalación, trabajo realizado, observaciones, mantenimiento, firmas, estado (`draft`/`submitted`/`validated`) |
+| `work_report_lines` | Orden de trabajo: descripción, técnico, hora inicio y final; `hours` calculadas (cruzan medianoche) — **solo informativas** |
+| `work_report_billing` | Importe (IVA no incluido). **Solo administración** (RLS): los trabajadores ni lo leen |
+| `clients.province`, `postal_code`, `legal_rep_name`, `legal_rep_tax_id` · `projects.province`, `postal_code`, `site_contact_name`, `site_contact_phone` · `companies.trade_name`, `tagline`, `phone_2` | Datos que pide la plantilla |
+| `work_report_prefill(obra)` | Datos de cliente, instalación y equipo para rellenar el parte (el trabajador no tiene acceso a la tabla de clientes) |
+| `work_report_save(parte, líneas, estado)` | Guarda parte + líneas en una transacción, **con los permisos de quien guarda** |
+| Bucket `signatures` (privado, PNG ≤ 1 MB) | Firmas. Cada usuario escribe en su carpeta; se leen las propias, las de partes que el usuario puede ver y, administración, todas |
+
+Reglas (RLS): el trabajador crea partes suyos solo en obras activas; los modifica
+mientras no estén validados; no puede validarlos; solo borra borradores; no ve
+partes ajenos. Al enviar se avisa a administración; al validar o devolver, al trabajador.

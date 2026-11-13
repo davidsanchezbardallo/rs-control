@@ -14,10 +14,10 @@ export async function saveClient(_: ActionState, fd: FormData): Promise<ActionSt
   const s = await getAdminOrNull();
   if (!s) return fail(NO);
   const raw = formObject(fd);
-  const p = z.object({ kind: z.enum(["company", "individual", "community", "public"]), name: text("Nombre", 160), tax_id: taxId, address: optText(200), city: optText(80), contact_name: optText(120), phone: optText(30), email: z.string().trim().email("Email no válido").optional(), notes: optText(1000) }).safeParse(raw);
+  const p = z.object({ kind: z.enum(["company", "individual", "community", "public"]), name: text("Nombre", 160), tax_id: taxId, address: optText(200), city: optText(80), province: optText(80), postal_code: optText(10), legal_rep_name: optText(160), legal_rep_tax_id: taxId, contact_name: optText(120), phone: optText(30), email: z.string().trim().email("Email no válido").optional(), notes: optText(1000) }).safeParse(raw);
   if (!p.success) return invalid(p.error);
   const d = p.data;
-  const row = { kind: d.kind, name: d.name, tax_id: nul(d.tax_id), address: nul(d.address), city: nul(d.city), contact_name: nul(d.contact_name), phone: nul(d.phone), email: nul(d.email), notes: nul(d.notes) };
+  const row = { kind: d.kind, name: d.name, tax_id: nul(d.tax_id), address: nul(d.address), city: nul(d.city), province: nul(d.province), postal_code: nul(d.postal_code), legal_rep_name: nul(d.legal_rep_name), legal_rep_tax_id: nul(d.legal_rep_tax_id), contact_name: nul(d.contact_name), phone: nul(d.phone), email: nul(d.email), notes: nul(d.notes) };
   const { error } = raw.id ? await s.supabase.from("clients").update(row).eq("id", raw.id) : await s.supabase.from("clients").insert({ ...row, company_id: s.profile.companyId });
   if (error) return fail(friendlyError(error));
   revalidatePath("/contactos");

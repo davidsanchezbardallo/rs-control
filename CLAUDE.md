@@ -24,8 +24,12 @@ antes de acciones arriesgadas o externas (GitHub, Supabase nube, Vercel).
 9. Mantener actualizados `README.md`, `CLAUDE.md` y `docs/`.
 
 ## Decisiones de negocio vigentes
-- Trabajador: solo solicitar material, confirmar recepción, salidas/devoluciones
-  directas, obra(s) y vehículo, incidencias. Sin vacaciones ni datos económicos.
+- Trabajador: solo partes de trabajo, solicitar material, confirmar recepción,
+  salidas/devoluciones directas, obra(s) y vehículo, incidencias. Sin vacaciones ni
+  datos económicos.
+- Partes de trabajo: solo de obras activas; editables hasta que administración los
+  valida; horas solo informativas; importe en `work_report_billing` (solo admin, nunca
+  en pantallas ni PDF del trabajador); firmas PNG en el bucket privado `signatures`.
 - Coste de material de obra = salidas − devoluciones aptas, a precio medio congelado.
 - Stock nunca negativo. Facturas: se emiten en Contasimple; aquí se registran.
 - Login con nombre de usuario (email técnico `usuario@USERNAME_EMAIL_DOMAIN`).

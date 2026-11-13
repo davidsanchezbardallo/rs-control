@@ -17,6 +17,10 @@ const projectSchema = z.object({
   work_type: optText(60),
   address: optText(200),
   city: optText(80),
+  province: optText(80),
+  postal_code: optText(10),
+  site_contact_name: optText(160),
+  site_contact_phone: optText(30),
   start_date: optDate,
   planned_end_date: optDate,
   actual_end_date: optDate,
@@ -42,6 +46,7 @@ export async function saveProject(_: ActionState, fd: FormData): Promise<ActionS
   const nul = <T,>(v: T | undefined) => v ?? null;
   const row = {
     name: p.data.name, client_id: nul(p.data.client_id), work_type: nul(p.data.work_type), address: nul(p.data.address), city: nul(p.data.city),
+    province: nul(p.data.province), postal_code: nul(p.data.postal_code), site_contact_name: nul(p.data.site_contact_name), site_contact_phone: nul(p.data.site_contact_phone),
     start_date: nul(p.data.start_date), planned_end_date: nul(p.data.planned_end_date), actual_end_date: nul(p.data.actual_end_date),
     manager_employee_id: nul(p.data.manager_employee_id), status: p.data.status, description: nul(p.data.description), notes: nul(p.data.notes),
   };

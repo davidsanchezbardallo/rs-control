@@ -20,7 +20,10 @@ export function CompanyForm({ c, settings }: { c: Rec; settings: { vacation_days
             <TextField label="CIF" name="tax_id" defaultValue={v(c, "tax_id")} />
             <TextField label="Dirección" name="address" defaultValue={v(c, "address")} className="sm:col-span-2" />
             <TextField label="Localidad" name="city" defaultValue={v(c, "city")} />
+            <TextField label="Nombre comercial" name="trade_name" defaultValue={v(c, "trade_name")} hint="Cabecera de los partes de trabajo" />
+            <TextField label="Lema / actividad" name="tagline" defaultValue={v(c, "tagline")} className="sm:col-span-2" hint="Ej.: Instalaciones eléctricas, CCTV y alarmas" />
             <TextField label="Teléfono" name="phone" defaultValue={v(c, "phone")} />
+            <TextField label="Teléfono 2" name="phone_2" defaultValue={v(c, "phone_2")} />
             <TextField label="Email" name="email" type="email" defaultValue={v(c, "email")} error={s.fieldErrors?.email} />
           </div>
           <div className="grid gap-4 sm:grid-cols-3">

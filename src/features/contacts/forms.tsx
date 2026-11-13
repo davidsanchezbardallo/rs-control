@@ -25,6 +25,10 @@ export function ClientDialog({ c }: { c?: Rec }) {
                 <TextField label="CIF / NIF" name="tax_id" defaultValue={v(c, "tax_id")} />
                 <TextField label="Dirección" name="address" defaultValue={v(c, "address")} />
                 <TextField label="Localidad" name="city" defaultValue={v(c, "city")} />
+                <TextField label="Provincia" name="province" defaultValue={v(c, "province")} />
+                <TextField label="C.P." name="postal_code" defaultValue={v(c, "postal_code")} inputMode="numeric" />
+                <TextField label="Representante legal" name="legal_rep_name" defaultValue={v(c, "legal_rep_name")} />
+                <TextField label="NIF del representante" name="legal_rep_tax_id" defaultValue={v(c, "legal_rep_tax_id")} />
                 <TextField label="Persona de contacto" name="contact_name" defaultValue={v(c, "contact_name")} />
                 <TextField label="Teléfono" name="phone" defaultValue={v(c, "phone")} />
                 <TextField label="Email" name="email" type="email" defaultValue={v(c, "email")} error={s.fieldErrors?.email} />

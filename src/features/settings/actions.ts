@@ -17,6 +17,7 @@ export async function saveCompany(_: ActionState, fd: FormData): Promise<ActionS
   const p = z
     .object({
       name: text("Razón social", 160), tax_id: optText(15), address: optText(200), city: optText(80), phone: optText(30),
+      trade_name: optText(80), tagline: optText(160), phone_2: optText(30),
       email: z.string().trim().email("Email no válido").optional(),
       vacation_days_per_year: z.string().transform(Number).pipe(z.number().int().min(0).max(60)),
       alert_days: z.string().transform(Number).pipe(z.number().int().min(1).max(180)),
@@ -26,7 +27,7 @@ export async function saveCompany(_: ActionState, fd: FormData): Promise<ActionS
   const d = p.data;
   const { error } = await s.supabase
     .from("companies")
-    .update({ name: d.name, tax_id: nul(d.tax_id), address: nul(d.address), city: nul(d.city), phone: nul(d.phone), email: nul(d.email), settings: { vacation_days_per_year: d.vacation_days_per_year, alert_days: d.alert_days } })
+    .update({ name: d.name, trade_name: nul(d.trade_name), tagline: nul(d.tagline), phone_2: nul(d.phone_2), tax_id: nul(d.tax_id), address: nul(d.address), city: nul(d.city), phone: nul(d.phone), email: nul(d.email), settings: { vacation_days_per_year: d.vacation_days_per_year, alert_days: d.alert_days } })
     .eq("id", s.profile.companyId);
   if (error) return fail(friendlyError(error));
   revalidatePath("/", "layout");

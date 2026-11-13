@@ -1,8 +1,8 @@
 import {
   AlertTriangle,
-  ArrowLeftRight,
   BarChart3,
   Boxes,
+  ClipboardList,
   Contact,
   FileText,
   HardHat,
@@ -28,6 +28,7 @@ export const ADMIN_NAV: NavGroup[] = [
     items: [
       { label: "Almacén", href: "/almacen", icon: Boxes },
       { label: "Obras", href: "/obras", icon: HardHat },
+      { label: "Partes de trabajo", href: "/partes", icon: ClipboardList },
       { label: "Incidencias", href: "/incidencias", icon: AlertTriangle },
       { label: "Trabajadores", href: "/trabajadores", icon: Users },
       { label: "Vehículos y herramientas", href: "/vehiculos", icon: Truck },
@@ -48,13 +49,15 @@ export const ADMIN_NAV: NavGroup[] = [
 /** Barra inferior de la app del trabajador: solo sus operaciones. */
 export const WORKER_NAV: NavItem[] = [
   { label: "Inicio", href: "/mi", icon: Home },
+  { label: "Partes", href: "/mi/partes", icon: ClipboardList },
   { label: "Material", href: "/mi/material", icon: PackagePlus },
-  { label: "Movimientos", href: "/mi/movimientos", icon: ArrowLeftRight },
   { label: "Incidencias", href: "/mi/incidencias", icon: AlertTriangle },
   { label: "Perfil", href: "/mi/perfil", icon: UserRound },
 ];
 
 export function isActive(pathname: string, href: string): boolean {
   if (href === "/mi") return pathname === "/mi";
+  // «Material» agrupa solicitudes y movimientos (retiradas y devoluciones)
+  if (href === "/mi/material" && pathname.startsWith("/mi/movimientos")) return true;
   return pathname === href || pathname.startsWith(`${href}/`);
 }

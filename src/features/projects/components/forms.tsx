@@ -9,7 +9,7 @@ import { addAssignment, addBudgetItem, addExpense, endAssignment, saveEstimates,
 import { BUDGET_KIND, COST_CATEGORY, PROJECT_STATUS, options } from "@/lib/labels";
 import type { Option } from "@/features/lookups";
 
-type P = Partial<Record<"id" | "code" | "name" | "client_id" | "work_type" | "address" | "city" | "start_date" | "planned_end_date" | "actual_end_date" | "manager_employee_id" | "status" | "description" | "notes", string | null>>;
+type P = Partial<Record<"id" | "code" | "name" | "client_id" | "work_type" | "address" | "city" | "province" | "postal_code" | "site_contact_name" | "site_contact_phone" | "start_date" | "planned_end_date" | "actual_end_date" | "manager_employee_id" | "status" | "description" | "notes", string | null>>;
 const WORK_TYPES = ["Obra nueva", "Vivienda", "Local comercial", "Reforma", "Iluminación", "CCTV y alarmas", "Telecomunicaciones", "Mantenimiento", "Otros"].map((v) => ({ value: v, label: v }));
 
 export function ProjectForm({ p, clients, employees }: { p?: P; clients: Option[]; employees: Option[] }) {
@@ -31,6 +31,12 @@ export function ProjectForm({ p, clients, employees }: { p?: P; clients: Option[
           <div className="grid gap-4 sm:grid-cols-3">
             <TextField label="Dirección" name="address" defaultValue={d("address")} className="sm:col-span-2" />
             <TextField label="Localidad" name="city" defaultValue={d("city") ?? "Utrera"} />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-4">
+            <TextField label="Provincia" name="province" defaultValue={d("province") ?? "Sevilla"} />
+            <TextField label="C.P." name="postal_code" defaultValue={d("postal_code")} inputMode="numeric" />
+            <TextField label="Contacto en obra" name="site_contact_name" defaultValue={d("site_contact_name")} hint="Para los partes de trabajo" />
+            <TextField label="Teléfono de contacto" name="site_contact_phone" defaultValue={d("site_contact_phone")} type="tel" />
           </div>
           <div className="grid gap-4 sm:grid-cols-4">
             <TextField label="Inicio" name="start_date" type="date" defaultValue={d("start_date")} />
