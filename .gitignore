@@ -45,3 +45,4 @@ next-env.d.ts
 
 # copia de seguridad descargable del repositorio
 /rs-control.bundle
+muestras/

@@ -247,9 +247,9 @@ export async function buildWorkReportPdf(input: PdfInput): Promise<Uint8Array> {
   }
   y -= 10;
 
-  paragraphBox("TRABAJO REALIZADO", r.work_done, 5);
+  paragraphBox("TRABAJO REALIZADO", r.work_done, 4);
   y -= 10;
-  paragraphBox("OBSERVACIONES", r.observations, 3);
+  paragraphBox("OBSERVACIONES", r.observations, 2);
   y -= 10;
 
   // ---------------------------------------------------------------- Mantenimiento e importe
@@ -269,22 +269,22 @@ export async function buildWorkReportPdf(input: PdfInput): Promise<Uint8Array> {
   }
 
   // ---------------------------------------------------------------- Firmas
-  ensure(110);
+  ensure(96);
   const sw = (W - 20) / 2;
   const signBox = (x: number, title: string, img: PDFImage | null, name: string | null) => {
-    page.drawRectangle({ x, y: y - 96, width: sw, height: 96, borderColor: LINE, borderWidth: 0.8 });
+    page.drawRectangle({ x, y: y - 88, width: sw, height: 88, borderColor: LINE, borderWidth: 0.8 });
     text(title, x + 6, y - 12, 8, bold, MUTED);
     if (img) {
       const maxW = sw - 20;
-      const maxH = 60;
+      const maxH = 54;
       const s = Math.min(maxW / img.width, maxH / img.height);
       page.drawImage(img, { x: x + (sw - img.width * s) / 2, y: y - 18 - maxH + (maxH - img.height * s) / 2, width: img.width * s, height: img.height * s });
     }
-    if (name) text(name, x + 6, y - 90, 8);
+    if (name) text(name, x + 6, y - 82, 8);
   };
   signBox(M, "FIRMA CLIENTE", sigClient, r.client_signer_name);
   signBox(M + sw + 20, "FIRMA EMPRESA", sigCompany, r.employee);
-  y -= 104;
+  y -= 96;
 
   // Pie en todas las páginas
   const pages = doc.getPages();
