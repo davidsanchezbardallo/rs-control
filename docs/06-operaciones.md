@@ -94,7 +94,10 @@ Préstamos y pólizas no se comparten por este sistema: siguen siendo manuales.
    se descarga un archivo `.pem` (clave privada) y se muestra el **Application ID**.
 3. En la aplicación creada: **Activate by linking accounts** y vincular, una a
    una, las cuentas de Santander, Sabadell, Cajamar y Caja Rural de Utrera
-   (modo restringido: sin contrato comercial, solo vuestras cuentas).
+   (modo restringido: solo vuestras cuentas). **Atención:** según las condiciones de
+   Enable Banking (sección «Restriction of Use»), para empresas este modo es de
+   evaluación; el uso profesional continuado requiere contrato (pedir presupuesto a
+   info@enablebanking.com). Avisan por escrito antes de exigirlo.
 4. En Vercel → *Settings → Environment Variables*, añadir:
    `ENABLE_BANKING_APP_ID`, `ENABLE_BANKING_PRIVATE_KEY` (contenido completo del
    `.pem`, marcada como sensible), `APP_URL` (`https://rs-control-pd4l.vercel.app`)

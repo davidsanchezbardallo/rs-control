@@ -70,7 +70,7 @@ Tres ideas vertebran la arquitectura propuesta:
 | D11 | Identidad | Logotipo oficial redibujado en vectorial; azul **#283582** y rojo **#E2070F** extraídos del logotipo. |
 | D13 | Material no catalogado | Se puede pedir en texto libre. |
 | D14 | Registros del trabajador | Directos; administración puede anular con movimiento inverso. |
-| D16 | Conexión bancaria (13/11/2026) | Banca abierta PSD2 de **solo lectura** con **Enable Banking** en modo restringido (solo cuentas propias, sin contrato). Bancos: Santander, Sabadell, Cajamar, Caja Rural de Utrera. Las cuentas conectadas toman el saldo del banco, importan movimientos sin duplicados y se **concilian** con facturas; préstamos y pólizas siguen manuales. |
+| D16 | Conexión bancaria (13/11/2026) | Banca abierta PSD2 de **solo lectura** con **Enable Banking** en modo restringido (solo cuentas propias vinculadas). **Según sus condiciones, el uso por empresas en este modo es de evaluación**: el uso profesional continuado requiere un contrato (de pago, bajo presupuesto); Enable Banking avisa por escrito antes de exigirlo. Pendiente: solicitar presupuesto. Bancos: Santander, Sabadell, Cajamar, Caja Rural de Utrera. Las cuentas conectadas toman el saldo del banco, importan movimientos sin duplicados y se **concilian** con facturas; préstamos y pólizas siguen manuales. |
 
 ## 5. Decisiones aún pendientes
 
