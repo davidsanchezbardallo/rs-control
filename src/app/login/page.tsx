@@ -52,6 +52,9 @@ export default function LoginPage() {
           <p className="mt-10 text-[12px] leading-relaxed text-muted">
             Acceso restringido al personal autorizado de RS Instalaciones XXI SL. La actividad queda registrada.
           </p>
+          <p className="mt-3 text-[12px] text-muted">
+            <a className="hover:text-ink" href="/privacidad">Privacidad</a> · <a className="hover:text-ink" href="/condiciones">Condiciones de uso</a>
+          </p>
         </div>
       </main>
     </div>
